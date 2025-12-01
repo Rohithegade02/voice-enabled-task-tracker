@@ -1,30 +1,28 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { config } from '../../config/env';
 import { ParsedVoiceInput, TaskPriority, TaskStatus } from '../../types';
 import { parseISO, addDays, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday } from 'date-fns';
 
 export class GeminiParserService {
-  private genAI: GoogleGenerativeAI;
-  private model: any;
+  private client: GoogleGenAI;
+  private readonly modelName = 'gemini-2.5-flash';
 
   constructor() {
-    this.genAI = new GoogleGenerativeAI(config.ai.geminiKey!);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    this.client = new GoogleGenAI({ apiKey: config.ai.geminiKey });
   }
 
   async parseTaskFromTranscript(transcript: string): Promise<ParsedVoiceInput> {
     try {
       const prompt = this.buildPrompt(transcript);
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const result = await this.client.models.generateContent({
+        model: this.modelName,
+        contents: prompt,
+      });
 
-      // Extract JSON from response (remove markdown code blocks if present)
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        console.error('Gemini response:', text);
-        throw new Error('No JSON found in Gemini response');
-      }
+      const text = result.text;
+      const jsonMatch = text?.match(/\{[\s\S]*\}/);
+      
+      if (!jsonMatch) throw new Error('No JSON found in response');
 
       const parsed = JSON.parse(jsonMatch[0]);
 
@@ -38,7 +36,6 @@ export class GeminiParserService {
       };
     } catch (error) {
       console.error('Gemini parsing error:', error);
-      // Fallback to manual parsing
       return this.fallbackParsing(transcript);
     }
   }
@@ -48,75 +45,40 @@ export class GeminiParserService {
     const todayStr = today.toISOString().split('T')[0];
     const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
 
-    return `You are an AI assistant that extracts task information from natural language.
+    return `You are an AI assistant extracting task details.
+Today: ${todayStr} (${dayOfWeek})
+Input: "${transcript}"
 
-Today's date: ${todayStr} (${dayOfWeek})
+PRIORITY RULES:
+- High: "urgent", "critical", "asap", "high priority", "immediately"
+- Low: "low priority", "whenever", "not urgent", "no rush"
+- Medium: Default
 
-User said: "${transcript}"
-
-Carefully analyze the input and extract task details. Pay special attention to priority keywords.
-
-PRIORITY DETECTION RULES (VERY IMPORTANT):
-- If the text contains ANY of these words, set priority to "High":
-  * "high priority"
-  * "high-priority"
-  * "urgent"
-  * "critical"
-  * "asap"
-  * "immediately"
-  * "important"
-  * "it's high priority"
-  * "this is urgent"
-  
-- If the text contains ANY of these words, set priority to "Low":
-  * "low priority"
-  * "low-priority"
-  * "whenever"
-  * "not urgent"
-  * "when you can"
-  * "no rush"
-  
-- Otherwise, set priority to "Medium"
-
-DATE PARSING RULES:
+DATE RULES:
 - "tomorrow" → ${addDays(today, 1).toISOString().split('T')[0]}
-- "next Monday" → next Monday's date
-- "next Tuesday" → next Tuesday's date
-- "next Wednesday" → next Wednesday's date
-- "next Thursday" → next Thursday's date
-- "next Friday" → next Friday's date
-- "next Saturday" → next Saturday's date
-- "next Sunday" → next Sunday's date
-- "in 3 days" → add 3 days to today
-- "by Friday" → coming Friday
-- Specific dates like "January 15" or "15th Jan" → parse to YYYY-MM-DD
-- If no date mentioned → null
+- "next [Day]" → Date of next specific weekday
+- "in 3 days" → Add 3 days
+- "by Friday" → Coming Friday
+- Specific dates → YYYY-MM-DD
+- None → null
 
-TITLE EXTRACTION RULES:
-- Remove these phrases from the beginning: "create", "add", "new task", "remind me to", "I need to", "todo"
-- Keep the core action/task description
-- Remove date information from title
-- Remove priority information from title
-- Keep it concise (under 100 characters)
+TITLE RULES:
+- Remove: "create", "add", "remind me to", "todo"
+- No date/priority in title
+- Under 100 chars
 
-STATUS RULES:
-- Default to "To Do" unless explicitly mentioned
-- "in progress", "working on" → "In Progress"
-- "done", "completed", "finished" → "Done"
-
-Return ONLY a valid JSON object (no markdown, no explanation):
+Return ONLY JSON:
 {
-  "title": "extracted title here",
-  "description": "additional details if any (or null)",
-  "priority": "Low" | "Medium" | "High",
-  "dueDate": "YYYY-MM-DD" | null,
-  "status": "To Do" | "In Progress" | "Done"
+  "title": "string",
+  "description": "string|null",
+  "priority": "Low|Medium|High",
+  "dueDate": "YYYY-MM-DD|null",
+  "status": "To Do|In Progress|Done"
 }`;
   }
 
   private mapPriority(priority: string | undefined): TaskPriority {
     if (!priority) return TaskPriority.MEDIUM;
-    
     const normalized = priority.toLowerCase().trim();
     if (normalized === 'high') return TaskPriority.HIGH;
     if (normalized === 'low') return TaskPriority.LOW;
@@ -125,7 +87,6 @@ Return ONLY a valid JSON object (no markdown, no explanation):
 
   private mapStatus(status: string | undefined): TaskStatus {
     if (!status) return TaskStatus.TODO;
-    
     const normalized = status.toLowerCase().trim();
     if (normalized === 'in progress') return TaskStatus.IN_PROGRESS;
     if (normalized === 'done') return TaskStatus.DONE;
@@ -134,17 +95,12 @@ Return ONLY a valid JSON object (no markdown, no explanation):
 
   private parseDate(dateStr: string | undefined): Date | undefined {
     if (!dateStr || dateStr === 'null') return undefined;
-
     try {
       const date = parseISO(dateStr);
-      if (!isNaN(date.getTime())) {
-        return date;
-      }
-    } catch (error) {
-      console.error('Date parsing error:', error);
+      return !isNaN(date.getTime()) ? date : undefined;
+    } catch {
+      return undefined;
     }
-
-    return undefined;
   }
 
   private extractSimpleTitle(transcript: string): string {
@@ -156,57 +112,30 @@ Return ONLY a valid JSON object (no markdown, no explanation):
       .trim();
 
     title = title.charAt(0).toUpperCase() + title.slice(1);
-
-    if (title.length > 100) {
-      title = title.substring(0, 97) + '...';
-    }
-
-    return title || 'New Task';
+    return title.length > 100 ? title.substring(0, 97) + '...' : (title || 'New Task');
   }
 
-  // Fallback manual parsing if Gemini fails
   private fallbackParsing(transcript: string): ParsedVoiceInput {
-    const lowerTranscript = transcript.toLowerCase();
-
-    // Detect priority manually
+    const lower = transcript.toLowerCase();
     let priority = TaskPriority.MEDIUM;
-    if (
-      lowerTranscript.includes('high priority') ||
-      lowerTranscript.includes('urgent') ||
-      lowerTranscript.includes('critical') ||
-      lowerTranscript.includes('asap') ||
-      lowerTranscript.includes('important')
-    ) {
+
+    if (['high priority', 'urgent', 'critical', 'asap', 'important'].some(w => lower.includes(w))) {
       priority = TaskPriority.HIGH;
-    } else if (
-      lowerTranscript.includes('low priority') ||
-      lowerTranscript.includes('whenever') ||
-      lowerTranscript.includes('not urgent')
-    ) {
+    } else if (['low priority', 'whenever', 'not urgent'].some(w => lower.includes(w))) {
       priority = TaskPriority.LOW;
     }
 
-    // Detect date manually
-    let dueDate: Date | undefined = undefined;
+    let dueDate: Date | undefined;
     const today = new Date();
-    
-    if (lowerTranscript.includes('tomorrow')) {
-      dueDate = addDays(today, 1);
-    } else if (lowerTranscript.includes('next monday')) {
-      dueDate = nextMonday(today);
-    } else if (lowerTranscript.includes('next tuesday')) {
-      dueDate = nextTuesday(today);
-    } else if (lowerTranscript.includes('next wednesday')) {
-      dueDate = nextWednesday(today);
-    } else if (lowerTranscript.includes('next thursday')) {
-      dueDate = nextThursday(today);
-    } else if (lowerTranscript.includes('next friday')) {
-      dueDate = nextFriday(today);
-    } else if (lowerTranscript.includes('next saturday')) {
-      dueDate = nextSaturday(today);
-    } else if (lowerTranscript.includes('next sunday')) {
-      dueDate = nextSunday(today);
-    }
+
+    if (lower.includes('tomorrow')) dueDate = addDays(today, 1);
+    else if (lower.includes('next monday')) dueDate = nextMonday(today);
+    else if (lower.includes('next tuesday')) dueDate = nextTuesday(today);
+    else if (lower.includes('next wednesday')) dueDate = nextWednesday(today);
+    else if (lower.includes('next thursday')) dueDate = nextThursday(today);
+    else if (lower.includes('next friday')) dueDate = nextFriday(today);
+    else if (lower.includes('next saturday')) dueDate = nextSaturday(today);
+    else if (lower.includes('next sunday')) dueDate = nextSunday(today);
 
     return {
       transcript,
