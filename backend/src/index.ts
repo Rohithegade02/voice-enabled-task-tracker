@@ -1,18 +1,35 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
+import { createApp } from './app';
+import { connectDatabase } from './config/database';
+import { config } from './config/env';
 
-const app = express();
-const PORT = process.env.PORT || 4000;
+const startServer = async () => {
+  try {
+    // Connect to MongoDB
+    await connectDatabase();
 
-app.use(cors());
-app.use(express.json());
+    // Create Express app
+    const app = await createApp();
 
-app.get("/api/health", (req: Request, res: Response) => {
-  res.json({ status: "ok", service: "voice-enabled-task-tracker-backend" });
-});
+    // Start server
+    const PORT = config.port;
+    app.listen(PORT, () => {
+      console.log(`
+        Server is running on port ${PORT}
+      `);
+    });
 
-app.listen(PORT, () => {
-  console.log(`Backend server is running on http://localhost:${PORT}`);
-});
+    // Handle graceful shutdown
+    process.on('SIGINT', async () => {
+      process.exit(0);
+    });
 
+    process.on('SIGTERM', async () => {
+      process.exit(0);
+    });
+  } catch (error) {
+    process.exit(1);
+  }
+};
 
+// Start the server
+startServer();

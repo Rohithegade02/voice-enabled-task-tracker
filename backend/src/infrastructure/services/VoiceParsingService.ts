@@ -1,8 +1,9 @@
 import { ParsedVoiceInput } from '../../types';
+import { IVoiceParsingService } from '../../domain/interfaces/IAIService';
 import { AssemblyAIService } from './AssemblyAIService';
 import { GeminiParserService } from './GeminiParserService';
 
-export class VoiceParsingService {
+export class VoiceParsingService implements IVoiceParsingService {
   private assemblyAI: AssemblyAIService;
   private gemini: GeminiParserService;
 
