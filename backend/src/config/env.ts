@@ -1,16 +1,29 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+
+const port = process.env.PORT;
+const nodeEnv = process.env.NODE_ENV || 'development';
+const mongodbUri = process.env.MONGODB_URI;
+const assemblyAiKey = process.env.ASSEMBLYAI_API_KEY;
+const geminiKey = process.env.GEMINI_API_KEY;
+
+console.log('port', port);
+console.log('nodeEnv', nodeEnv);
+console.log('mongodbUri', mongodbUri);
+console.log('assemblyAiKey', assemblyAiKey);
+console.log('geminiKey', geminiKey);
 
 export const config = {
-  port: process.env.PORT || 4000,
+  port,
   nodeEnv: process.env.NODE_ENV || 'development',
   mongodb: {
-    uri: process.env.MONGODB_URI
+    uri: mongodbUri
   },
   ai: {
-    assemblyAIKey: process.env.ASSEMBLYAI_API_KEY,
-    geminiKey: process.env.GEMINI_API_KEY,
+    assemblyAIKey: assemblyAiKey,
+    geminiKey: geminiKey,
   },
 };
 

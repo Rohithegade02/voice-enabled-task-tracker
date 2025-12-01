@@ -38,6 +38,11 @@ export const createTaskRoutes = (taskController: TaskController): Router => {
     upload.single('audio'),
     asyncHandler(taskController.parseVoiceInput)
   );
+  // POST /api/tasks/parse-text - Parse text inputrouter.post(
+  router.post(
+    '/parse-text',
+  asyncHandler(taskController.parseTextInput)
+);
 
   return router;
 };
