@@ -17,7 +17,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
         <div className="flex flex-col h-full">
             {/* Column Header */}
             <div className={cn(
-                "border-t-4 rounded-t-lg bg-card p-4 border-b",
+                "border-t-4  border-gray-300 rounded-t-lg bg-card p-4 border-b",
                 getColumnColor(status)
             )}>
                 <div className="flex items-center justify-between">
@@ -31,7 +31,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             </div>
 
             {/* Tasks Container */}
-            <div className="flex-1 p-4 space-y-3 overflow-y-auto bg-muted/20 rounded-b-lg">
+            <div className="flex-1 p-4 space-y-3 overflow-y-auto bg-muted/20  rounded-b-lg">
                 {tasks?.length === 0 ? (
                     <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
                         No tasks

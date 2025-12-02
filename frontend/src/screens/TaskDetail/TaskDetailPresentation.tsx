@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task, TaskStatus, TaskPriority, UpdateTaskDTO } from '@/types/task';
+import type { Task, UpdateTaskDTO } from '@/types/task';
 import { Button } from '@/components/atoms/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/card';
 import { Badge } from '@/components/atoms/badge';

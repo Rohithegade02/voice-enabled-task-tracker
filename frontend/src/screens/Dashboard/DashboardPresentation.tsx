@@ -171,7 +171,7 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
             ) : (
                 <>
                     {viewMode === 'kanban' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-250px)] min-h-[500px]">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-250px)] border-gray-200 min-h-[500px]">
                             <KanbanColumn
                                 title="To Do"
                                 status={TaskStatus.TODO}
