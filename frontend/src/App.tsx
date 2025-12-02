@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
+import { Dashboard } from '@/screens/Dashboard';
+import { Toaster } from '@/components/atoms/sonner';
 
 function App() {
   return (
-    <React.Fragment>
-      <h1>Hello World</h1>
-    </React.Fragment>
-  )
+    <div className="min-h-screen bg-background font-sans antialiased">
+      <Dashboard />
+      <Toaster />
+    </div>
+  );
 }
 
-export default App
+export default App;
