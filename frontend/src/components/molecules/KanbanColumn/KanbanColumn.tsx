@@ -25,19 +25,19 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
                         {title}
                     </h3>
                     <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                        {tasks.length}
+                        {tasks?.length}
                     </span>
                 </div>
             </div>
 
             {/* Tasks Container */}
             <div className="flex-1 p-4 space-y-3 overflow-y-auto bg-muted/20 rounded-b-lg">
-                {tasks.length === 0 ? (
+                {tasks?.length === 0 ? (
                     <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
                         No tasks
                     </div>
                 ) : (
-                    tasks.map((task) => (
+                    tasks?.map((task) => (
                         <TaskCard
                             key={task.id}
                             task={task}

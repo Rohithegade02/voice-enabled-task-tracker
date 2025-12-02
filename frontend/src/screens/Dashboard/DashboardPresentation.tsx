@@ -70,9 +70,9 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
     onEditTask,
 }) => {
     // Group tasks for Kanban view
-    const todoTasks = tasks.filter(t => t.status === TaskStatus.TODO);
-    const inProgressTasks = tasks.filter(t => t.status === TaskStatus.IN_PROGRESS);
-    const doneTasks = tasks.filter(t => t.status === TaskStatus.DONE);
+    const todoTasks = tasks?.filter(t => t.status === TaskStatus.TODO);
+    const inProgressTasks = tasks?.filter(t => t.status === TaskStatus.IN_PROGRESS);
+    const doneTasks = tasks?.filter(t => t.status === TaskStatus.DONE);
 
     const handleTaskSubmit = (data: CreateTaskDTO | UpdateTaskDTO) => {
         if (editingTask) {
@@ -150,12 +150,12 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
             </div>
 
             {/* Content */}
-            {isLoading && tasks.length === 0 ? (
+            {isLoading && tasks?.length === 0 ? (
                 <div className="space-y-4">
                     <Skeleton className="h-[200px] w-full rounded-xl" />
                     <Skeleton className="h-[200px] w-full rounded-xl" />
                 </div>
-            ) : tasks.length === 0 ? (
+            ) : tasks?.length === 0 ? (
                 <EmptyState
                     title="No tasks found"
                     description={

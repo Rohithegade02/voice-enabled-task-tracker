@@ -88,7 +88,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     onEditTask,
     onDeleteTask,
 }) => {
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
         return (
             <div className="flex items-center justify-center h-64 text-muted-foreground">
                 No tasks found

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dashboard } from '@/screens/Dashboard';
 import { Toaster } from '@/components/atoms/sonner';
 
