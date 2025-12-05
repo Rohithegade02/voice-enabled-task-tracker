@@ -1,5 +1,4 @@
-import React from 'react';
-import type { Task } from '@/types';
+import React, { Activity, memo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/atoms/table';
 import { Badge } from '@/components/atoms/badge';
 import { Button } from '@/components/atoms/button';
@@ -7,11 +6,11 @@ import { MoreVertical, Edit, Trash2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/atoms/dropdown-menu';
 import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
 import { format } from 'date-fns';
-import type { TaskListItemProps } from './types';
+import type { TaskListItemProps, TaskListProps } from './types';
 
 
 
-export const TaskListItem: React.FC<TaskListItemProps> = ({
+export const TaskListItem: React.FC<TaskListItemProps> = memo(({
     task,
     onClick,
     onEdit,
@@ -24,11 +23,11 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
         >
             <TableCell className="font-medium max-w-xs">
                 <div className="truncate">{task.title}</div>
-                {task.description && (
+                <Activity mode={task.description ? "visible" : "hidden"}>
                     <div className="text-sm text-muted-foreground truncate">
                         {task.description}
                     </div>
-                )}
+                </Activity>
             </TableCell>
             <TableCell>
                 <Badge variant={STATUS_COLORS[task.status]}>
@@ -73,16 +72,10 @@ export const TaskListItem: React.FC<TaskListItemProps> = ({
             </TableCell>
         </TableRow>
     );
-};
+});
 
-interface TaskListProps {
-    tasks: Task[];
-    onTaskClick: (task: Task) => void;
-    onEditTask: (task: Task) => void;
-    onDeleteTask: (id: string) => void;
-}
 
-export const TaskList: React.FC<TaskListProps> = ({
+export const TaskList: React.FC<TaskListProps> = memo(({
     tasks,
     onTaskClick,
     onEditTask,
@@ -122,4 +115,4 @@ export const TaskList: React.FC<TaskListProps> = ({
             </Table>
         </div>
     );
-};
+});

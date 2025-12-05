@@ -6,3 +6,4 @@ export { FilterBar } from './FilterBar';
 export { KanbanColumn } from './KanbanColumn';
 export { TaskList } from './TaskList';
 export { EmptyState } from './EmptyState';
+export { ConfirmDialog } from './ConfirmDialog';

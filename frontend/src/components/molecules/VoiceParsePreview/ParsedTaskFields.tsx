@@ -1,24 +1,12 @@
-import React from 'react';
+import React, { Activity, memo } from 'react';
 import { Input } from '@/components/atoms/input';
 import { Textarea } from '@/components/atoms/textarea';
 import { Label } from '@/components/atoms/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/select';
 import { TaskStatus, TaskPriority } from '@/types';
-import { Edit2 } from 'lucide-react';
+import type { ParsedTaskFieldsProps } from './types';
 
-interface ParsedTaskFieldsProps {
-    editedData: {
-        title: string;
-        description: string;
-        priority: TaskPriority;
-        dueDate: string;
-        status: TaskStatus;
-    };
-    errors: Record<string, string>;
-    onFieldChange: (field: string, value: string) => void;
-}
-
-export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = ({
+export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = memo(({
     editedData,
     errors,
     onFieldChange,
@@ -41,9 +29,9 @@ export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = ({
                     placeholder="Enter task title"
                     aria-invalid={!!errors.title}
                 />
-                {errors.title && (
+                <Activity mode={errors.title ? "visible" : "hidden"}>
                     <p className="text-sm text-destructive">{errors.title}</p>
-                )}
+                </Activity>
             </div>
 
             {/* Description */}
@@ -57,9 +45,9 @@ export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = ({
                     rows={3}
                     aria-invalid={!!errors.description}
                 />
-                {errors.description && (
+                <Activity mode={errors.description ? "visible" : "hidden"}>
                     <p className="text-sm text-destructive">{errors.description}</p>
-                )}
+                </Activity>
             </div>
 
             {/* Status and Priority */}
@@ -111,4 +99,4 @@ export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = ({
             </div>
         </div>
     );
-};
+});

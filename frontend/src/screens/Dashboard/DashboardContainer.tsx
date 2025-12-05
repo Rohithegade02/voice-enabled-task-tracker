@@ -3,12 +3,17 @@ import { DashboardPresentation } from './DashboardPresentation';
 import { useTasks, useFilters, useDebounce, useVoiceParsing } from '@/hooks';
 import type { CreateTaskDTO, UpdateTaskDTO, Task } from '@/types';
 import { toast } from 'sonner';
+import { ConfirmDialog } from '@/components/molecules';
 
 export const DashboardContainer: React.FC = () => {
     const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
     const [showTaskForm, setShowTaskForm] = useState<boolean>(false);
     const [showVoiceRecorder, setShowVoiceRecorder] = useState<boolean>(false);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; taskId: string | null }>({
+        isOpen: false,
+        taskId: null,
+    });
 
     // Hooks
     const { filters, setFilters, clearFilters } = useFilters();
@@ -68,19 +73,23 @@ export const DashboardContainer: React.FC = () => {
         }
     }, [updateTask, setShowTaskForm, setEditingTask]);
 
-    const handleDeleteTask = useCallback(async (id: string) => {
-        if (!window.confirm('Are you sure you want to delete this task?')) {
-            return;
-        }
+    const handleDeleteTask = useCallback((id: string) => {
+        setDeleteConfirmation({ isOpen: true, taskId: id });
+    }, []);
+
+    const confirmDelete = useCallback(async () => {
+        if (!deleteConfirmation.taskId) return;
 
         try {
-            await deleteTask(id);
+            await deleteTask(deleteConfirmation.taskId);
             toast.success('Task deleted successfully');
         } catch (err) {
             // Error already handled by hook and displayed via toast
             console.error(' Delete task error:', err);
+        } finally {
+            setDeleteConfirmation({ isOpen: false, taskId: null });
         }
-    }, [deleteTask]);
+    }, [deleteTask, deleteConfirmation.taskId]);
 
     const handleVoiceRecordingComplete = useCallback(async (audioBlob: Blob) => {
         setShowVoiceRecorder(false);
@@ -120,31 +129,44 @@ export const DashboardContainer: React.FC = () => {
     }, [setFilters]);
 
     return (
-        <DashboardPresentation
-            tasks={tasks}
-            isLoading={isLoading}
-            error={error}
-            viewMode={viewMode}
-            filters={filters}
-            showTaskForm={showTaskForm}
-            showVoiceRecorder={showVoiceRecorder}
-            parsedVoiceData={parsedData}
-            isParsingVoice={isParsingVoice}
-            editingTask={editingTask}
-            onViewModeChange={setViewMode}
-            onFilterChange={handleFilterChange}
-            onClearFilters={clearFilters}
-            onCreateTask={handleCreateTask}
-            onUpdateTask={handleUpdateTask}
-            onDeleteTask={handleDeleteTask}
-            onVoiceRecordingComplete={handleVoiceRecordingComplete}
-            onVoiceParseConfirm={handleVoiceParseConfirm}
-            onOpenTaskForm={() => setShowTaskForm(true)}
-            onCloseTaskForm={handleCloseTaskForm}
-            onOpenVoiceRecorder={() => setShowVoiceRecorder(true)}
-            onCloseVoiceRecorder={() => setShowVoiceRecorder(false)}
-            onCloseVoicePreview={resetParsing}
-            onEditTask={handleEditTask}
-        />
+        <React.Fragment>
+            <DashboardPresentation
+                tasks={tasks}
+                isLoading={isLoading}
+                error={error}
+                viewMode={viewMode}
+                filters={filters}
+                showTaskForm={showTaskForm}
+                showVoiceRecorder={showVoiceRecorder}
+                parsedVoiceData={parsedData}
+                isParsingVoice={isParsingVoice}
+                editingTask={editingTask}
+                onViewModeChange={setViewMode}
+                onFilterChange={handleFilterChange}
+                onClearFilters={clearFilters}
+                onCreateTask={handleCreateTask}
+                onUpdateTask={handleUpdateTask}
+                onDeleteTask={handleDeleteTask}
+                onVoiceRecordingComplete={handleVoiceRecordingComplete}
+                onVoiceParseConfirm={handleVoiceParseConfirm}
+                onOpenTaskForm={() => setShowTaskForm(true)}
+                onCloseTaskForm={handleCloseTaskForm}
+                onOpenVoiceRecorder={() => setShowVoiceRecorder(true)}
+                onCloseVoiceRecorder={() => setShowVoiceRecorder(false)}
+                onCloseVoicePreview={resetParsing}
+                onEditTask={handleEditTask}
+            />
+
+            <ConfirmDialog
+                isOpen={deleteConfirmation.isOpen}
+                onClose={() => setDeleteConfirmation({ isOpen: false, taskId: null })}
+                onConfirm={confirmDelete}
+                title="Delete Task"
+                description="Are you sure you want to delete this task? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDestructive
+            />
+        </React.Fragment>
     );
 };

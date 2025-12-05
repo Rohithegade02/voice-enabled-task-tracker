@@ -1,17 +1,17 @@
 "use client"
 
-import * as React from "react"
+import { memo, useState } from "react"
 import { ChevronDownIcon } from "lucide-react"
 import { Label, Button, Popover, PopoverContent, PopoverTrigger, Calendar } from "@/components/atoms"
 import type { DatePickerProps } from "./type"
 
 
-export function DatePicker({
+export const DatePicker = memo(({
     date,
     setDate,
     label,
-}: DatePickerProps) {
-    const [open, setOpen] = React.useState(false)
+}: DatePickerProps) => {
+    const [open, setOpen] = useState(false)
 
     return (
         <div className="flex flex-col gap-3">
@@ -43,4 +43,4 @@ export function DatePicker({
             </Popover>
         </div>
     )
-}
+})

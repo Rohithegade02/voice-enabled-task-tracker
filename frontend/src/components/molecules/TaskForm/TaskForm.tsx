@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { TaskStatus, TaskPriority, type CreateTaskDTO, type UpdateTaskDTO } from '@/types';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/atoms/dialog';
 import { Button } from '@/components/atoms/button';
@@ -9,13 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { TaskFormProps } from './types';
 import { DatePicker } from '../DatePicker';
 
-export const TaskForm: React.FC<TaskFormProps> = ({
+export const TaskForm: React.FC<TaskFormProps> = memo(({
     isOpen,
     onClose,
     onSubmit,
     initialData,
     mode,
 }) => {
+    console.log(mode)
     const [formData, setFormData] = useState({
         title: initialData?.title || '',
         description: initialData?.description || '',
@@ -204,4 +205,4 @@ export const TaskForm: React.FC<TaskFormProps> = ({
             </DialogContent>
         </Dialog>
     );
-};
+});

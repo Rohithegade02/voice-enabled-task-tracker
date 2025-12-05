@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/atoms/card';
@@ -10,7 +10,7 @@ import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
 
-export const TaskCard: React.FC<TaskCardProps> = ({
+export const TaskCard: React.FC<TaskCardProps> = memo(({
     task,
     onEdit,
     onDelete,
@@ -57,17 +57,25 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon-sm">
+                            <Button variant="ghost" size="icon-sm" onClick={(e) => e.stopPropagation()}>
                                 <MoreVertical className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => onEdit(task)}>
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEdit(task);
+                                }}
+                            >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => onDelete(task.id)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDelete(task.id);
+                                }}
                                 className="text-destructive"
                             >
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -102,4 +110,4 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             )}
         </Card>
     );
-};
+});

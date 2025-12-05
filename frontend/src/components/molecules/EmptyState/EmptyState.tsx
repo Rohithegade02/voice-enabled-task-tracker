@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Activity, memo } from 'react';
 import { FileQuestion } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import type { EmptyStateProps } from './types';
 
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
+export const EmptyState: React.FC<EmptyStateProps> = memo(({
     title,
     description,
     action,
@@ -19,11 +19,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             <p className="text-sm text-muted-foreground mb-6 max-w-md">
                 {description}
             </p>
-            {action && (
-                <Button onClick={action.onClick}>
-                    {action.label}
+            <Activity mode={action ? "visible" : "hidden"}>
+                <Button onClick={action?.onClick}>
+                    {action?.label}
                 </Button>
-            )}
+            </Activity>
         </div>
     );
-};
+});

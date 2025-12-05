@@ -6,3 +6,10 @@ export interface TaskListItemProps {
     onEdit: (task: Task) => void;
     onDelete: (id: string) => void;
 }
+
+export interface TaskListProps {
+    tasks: Task[];
+    onTaskClick: (task: Task) => void;
+    onEditTask: (task: Task) => void;
+    onDeleteTask: (id: string) => void;
+}

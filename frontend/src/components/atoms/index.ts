@@ -10,4 +10,5 @@ export * from './textarea'
 export * from './table'
 export * from './card'
 export * from './skeleton'
+export * from './dialog'
 

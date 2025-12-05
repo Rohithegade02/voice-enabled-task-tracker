@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Activity, memo, useCallback } from "react";
 import {
     Dialog,
     DialogContent,
@@ -6,15 +6,15 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/atoms/dialog";
-import { Button } from "@/components/atoms/button";
+    Button,
+} from "@/components/atoms";
 import { Mic, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useVoiceRecorder } from "@/hooks/useVoiceRecorder";
+import { useVoiceRecorder } from "@/hooks";
 import type { VoiceRecorderProps } from "./types";
 import { formatTime } from "@/utils";
 
-export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
+export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
     isOpen,
     onClose,
     onRecordingComplete,
@@ -28,11 +28,11 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
         cleanup,
     } = useVoiceRecorder(onRecordingComplete);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         if (isRecording) stopRecording();
         cleanup();
         onClose();
-    };
+    }, [isRecording, stopRecording, cleanup, onClose]);
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -43,8 +43,6 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
                         Click the microphone to start recording your task.
                     </DialogDescription>
                 </DialogHeader>
-
-                {/* CONTENT */}
                 <div className="flex flex-col items-center py-8 space-y-6">
                     {/* Record Button */}
                     <button
@@ -64,33 +62,28 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
                             <Mic className="w-10 h-10 text-white" />
                         )}
 
-                        {isRecording && (
+                        <Activity mode={isRecording ? "visible" : "hidden"}>
                             <span className="absolute -bottom-1 -right-1 flex h-6 w-6">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
                                 <span className="relative inline-flex rounded-full h-6 w-6 bg-destructive" />
                             </span>
-                        )}
-                    </button>
+                        </Activity>
 
-                    {/* Timer */}
-                    {isRecording && (
+                    </button>
+                    <Activity mode={isRecording ? "visible" : "hidden"} >
                         <div className="text-2xl font-mono font-semibold">
                             {formatTime(recordTime)}
                         </div>
-                    )}
-
-                    {/* Status Text */}
+                    </Activity>
                     <p className="text-sm text-muted-foreground text-center">
                         {isRecording
                             ? "Recording... Click stop when finished."
                             : "Click the microphone to start recording."}
                     </p>
-
-                    {/* Error */}
-                    {error && <p className="text-sm text-destructive text-center">{error}</p>}
+                    <Activity mode={error ? "visible" : "hidden"}>
+                        <p className="text-sm text-destructive text-center">{error}</p>
+                    </Activity>
                 </div>
-
-                {/* FOOTER */}
                 <DialogFooter>
                     <Button variant="outline" onClick={handleClose}>
                         Cancel
@@ -99,4 +92,4 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = ({
             </DialogContent>
         </Dialog>
     );
-};
+});

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { TaskStatus, TaskPriority } from '@/types';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/atoms/dialog';
 import { Button } from '@/components/atoms/button';
@@ -6,7 +6,7 @@ import type { VoiceParsePreviewProps } from './types';
 import { TranscriptDisplay } from './TranscriptDisplay';
 import { ParsedTaskFields } from './ParsedTaskFields';
 
-export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = ({
+export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = memo(({
     isOpen,
     onClose,
     parsedData,
@@ -25,14 +25,14 @@ export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = ({
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleFieldChange = (field: string, value: string) => {
+    const handleFieldChange = useCallback((field: string, value: string) => {
         setEditedData(prev => ({ ...prev, [field]: value }));
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: '' }));
         }
-    };
+    }, [errors]);
 
-    const validate = () => {
+    const validate = useCallback(() => {
         const newErrors: Record<string, string> = {};
 
         if (!editedData.title.trim()) {
@@ -47,9 +47,9 @@ export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = ({
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    };
+    }, [editedData]);
 
-    const handleConfirm = () => {
+    const handleConfirm = useCallback(() => {
         if (!validate()) {
             return;
         }
@@ -61,7 +61,7 @@ export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = ({
             dueDate: editedData.dueDate || undefined,
             status: editedData.status,
         });
-    };
+    }, [editedData, validate]);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -101,4 +101,4 @@ export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = ({
             </DialogContent>
         </Dialog>
     );
-};
+});

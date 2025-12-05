@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { TaskStatus, TaskPriority } from '@/types';
 import { Input } from '@/components/atoms/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/select';
@@ -8,7 +8,7 @@ import { Search, X } from 'lucide-react';
 import type { FilterBarProps } from './types';
 
 
-export const FilterBar: React.FC<FilterBarProps> = ({
+export const FilterBar: React.FC<FilterBarProps> = memo(({
     filters,
     onFilterChange,
     onClearFilters,
@@ -105,4 +105,4 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </div>
         </div>
     );
-};
+});

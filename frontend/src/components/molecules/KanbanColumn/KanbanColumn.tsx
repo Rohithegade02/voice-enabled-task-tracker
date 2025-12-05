@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { TaskCard } from '../TaskCard/TaskCard';
 import { cn } from '@/lib/utils';
 import type { KanbanColumnProps } from './types';
 import { getColumnColor } from '@/utils';
 
-export const KanbanColumn: React.FC<KanbanColumnProps> = ({
+export const KanbanColumn: React.FC<KanbanColumnProps> = memo(({
     title,
     status,
     tasks,
@@ -62,4 +62,4 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
             </div>
         </div>
     );
-};
+});

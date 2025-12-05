@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Activity } from 'react';
 import type { Task, UpdateTaskDTO } from '@/types';
 import { Button } from '@/components/atoms/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/card';
@@ -70,7 +70,7 @@ export const TaskDetailPresentation: React.FC<TaskDetailPresentationProps> = ({
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
-                    {task.description && (
+                    <Activity mode={task.description ? "visible" : "hidden"}>
                         <div className="space-y-2">
                             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                                 Description
@@ -79,8 +79,7 @@ export const TaskDetailPresentation: React.FC<TaskDetailPresentationProps> = ({
                                 {task.description}
                             </p>
                         </div>
-                    )}
-
+                    </Activity>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide flex items-center gap-2">

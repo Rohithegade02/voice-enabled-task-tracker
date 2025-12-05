@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TaskDetailPresentation } from './TaskDetailPresentation';
 import { useTasks } from '@/hooks';
-import { UpdateTaskDTO } from '@/types';
+import { type UpdateTaskDTO } from '@/types';
+import { ConfirmDialog } from '@/components/molecules';
 
 interface TaskDetailContainerProps {
     taskId: string;
@@ -14,6 +15,7 @@ export const TaskDetailContainer: React.FC<TaskDetailContainerProps> = ({
 }) => {
     const { tasks, updateTask, deleteTask, fetchTasks, isLoading, error } = useTasks();
     const [isEditing, setIsEditing] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Find task from local state or fetch if needed
     // Note: In a real app with routing, we might fetch by ID specifically
@@ -34,14 +36,18 @@ export const TaskDetailContainer: React.FC<TaskDetailContainerProps> = ({
         }
     };
 
-    const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this task?')) {
-            try {
-                await deleteTask(taskId);
-                onBack();
-            } catch (err) {
-                console.error('Failed to delete task:', err);
-            }
+    const handleDelete = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await deleteTask(taskId);
+            setShowDeleteConfirm(false);
+            onBack();
+        } catch (err) {
+            console.error('Failed to delete task:', err);
+            setShowDeleteConfirm(false);
         }
     };
 
@@ -50,16 +56,29 @@ export const TaskDetailContainer: React.FC<TaskDetailContainerProps> = ({
     }
 
     return (
-        <TaskDetailPresentation
-            task={task}
-            isLoading={isLoading}
-            error={error}
-            isEditing={isEditing}
-            onBack={onBack}
-            onEdit={() => setIsEditing(true)}
-            onCancelEdit={() => setIsEditing(false)}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-        />
+        <React.Fragment>
+            <TaskDetailPresentation
+                task={task}
+                isLoading={isLoading}
+                error={error}
+                isEditing={isEditing}
+                onBack={onBack}
+                onEdit={() => setIsEditing(true)}
+                onCancelEdit={() => setIsEditing(false)}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+            />
+
+            <ConfirmDialog
+                isOpen={showDeleteConfirm}
+                onClose={() => setShowDeleteConfirm(false)}
+                onConfirm={confirmDelete}
+                title="Delete Task"
+                description="Are you sure you want to delete this task? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                isDestructive
+            />
+        </React.Fragment>
     );
 };

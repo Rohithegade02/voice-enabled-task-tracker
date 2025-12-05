@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Card, CardHeader, CardTitle } from '@/components/atoms/card';
+import type { TranscriptDisplayProps } from './types';
 
-interface TranscriptDisplayProps {
-    transcript: string;
-}
-
-export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({ transcript }) => {
+export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = memo(({ transcript }) => {
     return (
         <Card>
             <CardHeader className="pb-3">
@@ -18,4 +15,4 @@ export const TranscriptDisplay: React.FC<TranscriptDisplayProps> = ({ transcript
             </CardHeader>
         </Card>
     );
-};
+});
