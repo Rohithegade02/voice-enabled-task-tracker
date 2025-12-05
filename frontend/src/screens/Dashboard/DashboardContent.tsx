@@ -21,7 +21,7 @@ const DashboardContent = memo(({
     filters
 }: DashboardContentProps) => {
     return (
-        <>
+        <React.Fragment>
             {isLoading && tasks?.length === 0 ? (
                 <div className="space-y-4">
                     <Skeleton className="h-[200px] w-full rounded-xl" />
@@ -64,7 +64,7 @@ const DashboardContent = memo(({
                     )}
                 </React.Fragment>
             )}
-        </>
+        </React.Fragment>
     )
 })
 

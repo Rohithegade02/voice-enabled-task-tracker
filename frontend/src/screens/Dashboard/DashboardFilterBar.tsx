@@ -12,7 +12,10 @@ const DashboardFilterBar = memo(({
     onViewModeChange
 }: DashboardFilterBarProps) => {
     return (
-        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+        <div
+            className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between"
+            data-testid="dashboard-filter-bar"
+        >
             <div className="flex-1 w-full md:w-auto">
                 <FilterBar
                     filters={filters}
