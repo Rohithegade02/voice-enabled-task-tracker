@@ -8,7 +8,16 @@ import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
 import { format } from 'date-fns';
 import type { TaskListItemProps, TaskListProps } from './types';
 
-
+/**
+ * TaskListItem component for displaying a task list item.
+ * It shows a list item with task details and optional action buttons.
+ *
+ * @param {TaskListItemProps} props - The props for the TaskListItem component.
+ * @param {Task} props.task - The task to be displayed in the list item.
+ * @param {() => void} props.onClick - Callback function invoked when the task list item is clicked.
+ * @param {() => void} props.onEdit - Callback function invoked when the task is edited.
+ * @param {() => void} props.onDelete - Callback function invoked when the task is deleted.
+ */
 
 export const TaskListItem: React.FC<TaskListItemProps> = memo(({
     task,

@@ -44,8 +44,7 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col items-center py-8 space-y-6">
-                    {/* Record Button */}
-                    <button
+                    <Button
                         onClick={isRecording ? stopRecording : startRecording}
                         disabled={!!error}
                         className={cn(
@@ -69,7 +68,7 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
                             </span>
                         </Activity>
 
-                    </button>
+                    </Button>
                     <Activity mode={isRecording ? "visible" : "hidden"} >
                         <div className="text-2xl font-mono font-semibold">
                             {formatTime(recordTime)}

@@ -6,12 +6,22 @@ import { Label, Button, Popover, PopoverContent, PopoverTrigger, Calendar } from
 import type { DatePickerProps } from "./type"
 
 
+/**
+ * DatePicker component for selecting a date.
+ * It provides a calendar popup to choose a date.
+ *
+ * @param {DatePickerProps} props - The props for the DatePicker component.
+ * @param {Date | null} props.date - The currently selected date.
+ * @param {() => void} props.setDate - Callback function to update the selected date.
+ * @param {string} props.label - The label for the date input field.
+ */
+
 export const DatePicker = memo(({
     date,
     setDate,
     label,
 }: DatePickerProps) => {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState<boolean>(false)
 
     return (
         <div className="flex flex-col gap-3">

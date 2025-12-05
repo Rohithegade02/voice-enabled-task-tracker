@@ -3,6 +3,16 @@ import { FileQuestion } from 'lucide-react';
 import { Button } from '@/components/atoms/button';
 import type { EmptyStateProps } from './types';
 
+/**
+ * EmptyState component for displaying an empty state message.
+ * It shows a message with an optional action button.
+ *
+ * @param {EmptyStateProps} props - The props for the EmptyState component.
+ * @param {string} props.title - The title displayed in the empty state.
+ * @param {string} props.description - The descriptive text explaining the empty state.
+ * @param {{ label: string; onClick: () => void } | null} [props.action=null] - The action button to be displayed.
+ * @param {ReactNode} [props.icon=null] - The icon to be displayed in the empty state.
+ */
 
 export const EmptyState: React.FC<EmptyStateProps> = memo(({
     title,

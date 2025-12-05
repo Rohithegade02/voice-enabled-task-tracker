@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { Activity, memo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/atoms/card';
@@ -9,6 +9,17 @@ import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
 import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
+
+/**
+ * TaskCard component for displaying a task card.
+ * It shows a card with task details and optional action buttons.
+ *
+ * @param {TaskCardProps} props - The props for the TaskCard component.
+ * @param {Task} props.task - The task to be displayed in the card.
+ * @param {() => void} props.onEdit - Callback function invoked when the task is edited.
+ * @param {() => void} props.onDelete - Callback function invoked when the task is deleted.
+ * @param {() => void} props.onClick - Callback function invoked when the task card is clicked.
+ */
 
 export const TaskCard: React.FC<TaskCardProps> = memo(({
     task,
@@ -97,17 +108,17 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
                 </div>
             </CardContent>
 
-            {task.dueDate && (
+            <Activity mode={task.dueDate ? 'visible' : 'hidden'}>
                 <CardFooter className="pt-0">
                     <div className={`flex items-center gap-1 text-sm ${task.isOverdue ? 'text-destructive' : 'text-muted-foreground'}`}>
                         <Calendar className="h-3.5 w-3.5" />
                         <span>
-                            {format(new Date(task.dueDate), 'MMM d, yyyy')}
+                            {task.dueDate && format(new Date(task.dueDate), 'MMM d, yyyy')}
                             {task.isOverdue && ' (Overdue)'}
                         </span>
                     </div>
                 </CardFooter>
-            )}
+            </Activity>
         </Card>
     );
 });

@@ -6,6 +6,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { TaskStatus, TaskPriority } from '@/types';
 import type { ParsedTaskFieldsProps } from './types';
 
+/**
+ * ParsedTaskFields component for displaying parsed task fields.
+ * It shows a form with task details and optional action buttons.
+ *
+ * @param {ParsedTaskFieldsProps} props - The props for the ParsedTaskFields component.
+ * @param {ParsedTaskData} props.editedData - The parsed task data to be displayed.
+ * @param {string[]} props.errors - The validation errors for each field.
+ * @param {(field: string, value: string) => void} props.onFieldChange - Callback function invoked when a field value changes.
+ */
+
 export const ParsedTaskFields: React.FC<ParsedTaskFieldsProps> = memo(({
     editedData,
     errors,

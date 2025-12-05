@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -9,17 +9,23 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/atoms/alert-dialog';
+import type { ConfirmDialogProps } from './types';
 
-interface ConfirmDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onConfirm: () => void;
-    title: string;
-    description: string;
-    confirmText?: string;
-    cancelText?: string;
-    isDestructive?: boolean;
-}
+
+/**
+ * ConfirmDialog component for displaying a confirmation dialog to the user.
+ * It provides options to confirm or cancel an action.
+ *
+ * @param {ConfirmDialogProps} props - The props for the ConfirmDialog component.
+ * @param {boolean} props.isOpen - Controls the visibility of the dialog.
+ * @param {() => void} props.onClose - Callback function invoked when the dialog is closed (e.g., by clicking outside or cancel button).
+ * @param {() => void} props.onConfirm - Callback function invoked when the confirm action is triggered.
+ * @param {string} props.title - The title displayed in the dialog header.
+ * @param {string} props.description - The descriptive text explaining the action to be confirmed.
+ * @param {string} [props.confirmText='Continue'] - The text for the confirm button.
+ * @param {string} [props.cancelText='Cancel'] - The text for the cancel button.
+ * @param {boolean} [props.isDestructive=false] - If true, styles the confirm button to indicate a destructive action.
+ */
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     isOpen,
@@ -31,10 +37,10 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     cancelText = 'Cancel',
     isDestructive = false,
 }) => {
-    const handleConfirm = () => {
+    const handleConfirm = useCallback(() => {
         onConfirm();
         onClose();
-    };
+    }, [onConfirm, onClose]);
 
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>

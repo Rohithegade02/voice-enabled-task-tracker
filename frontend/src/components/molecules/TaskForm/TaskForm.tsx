@@ -9,6 +9,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { TaskFormProps } from './types';
 import { DatePicker } from '../DatePicker';
 
+/**
+ * TaskForm component for displaying a task card.
+ * It shows a card with task details and optional action buttons.
+ *
+ * @param {TaskFormProps} props - The props for the TaskForm component.
+ * @param {boolean} props.isOpen - Whether the form is open or not.
+ * @param {() => void} props.onClose - Callback function invoked when the form is closed.
+ * @param {() => void} props.onSubmit - Callback function invoked when the form is submitted.
+ * @param {CreateTaskDTO | UpdateTaskDTO} props.initialData - The initial data for the form.
+ * @param {'create' | 'edit'} props.mode - The mode of the form (create or edit).
+ */
+
 export const TaskForm: React.FC<TaskFormProps> = memo(({
     isOpen,
     onClose,

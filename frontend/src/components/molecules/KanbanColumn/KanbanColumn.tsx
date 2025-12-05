@@ -5,6 +5,20 @@ import { cn } from '@/lib/utils';
 import type { KanbanColumnProps } from './types';
 import { getColumnColor } from '@/utils';
 
+/**
+ * KanbanColumn component for displaying a column in the Kanban board.
+ * It shows a column with a header, a droppable zone for tasks, and optional action buttons.
+ *
+ * @param {KanbanColumnProps} props - The props for the KanbanColumn component.
+ * @param {string} props.title - The title displayed in the column header.
+ * @param {string} props.status - The status of the column (e.g., "todo", "in_progress", "done").
+ * @param {Task[]} props.tasks - The tasks to be displayed in the column.
+ * @param {() => void} props.onTaskClick - Callback function invoked when a task is clicked.
+ * @param {() => void} props.onEditTask - Callback function invoked when a task is edited.
+ * @param {() => void} props.onDeleteTask - Callback function invoked when a task is deleted.
+ * @param {() => void} props.onStatusChange - Callback function invoked when the status of a task changes.
+ */
+
 export const KanbanColumn: React.FC<KanbanColumnProps> = memo(({
     title,
     status,
@@ -20,7 +34,6 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = memo(({
 
     return (
         <div className="flex flex-col h-full">
-            {/* Column Header */}
             <div className={cn(
                 "border-t-4 border-gray-300 rounded-t-lg bg-card p-4 border-b",
                 getColumnColor(status)
@@ -35,7 +48,6 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = memo(({
                 </div>
             </div>
 
-            {/* Tasks Container - Droppable Zone */}
             <div
                 ref={setNodeRef}
                 className={cn(

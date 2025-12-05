@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { Activity, memo, useCallback, useMemo } from 'react';
 import { TaskStatus, TaskPriority } from '@/types';
 import { Input } from '@/components/atoms/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/select';
@@ -7,6 +7,15 @@ import { Button } from '@/components/atoms/button';
 import { Search, X } from 'lucide-react';
 import type { FilterBarProps } from './types';
 
+/**
+ * FilterBar component for filtering tasks.
+ * It provides a search bar and dropdowns for filtering tasks by status and priority.
+ *
+ * @param {FilterBarProps} props - The props for the FilterBar component.
+ * @param {Filter} props.filters - The current filter state.
+ * @param {() => void} props.onFilterChange - Callback function to update the filter state.
+ * @param {() => void} props.onClearFilters - Callback function to clear all filters.
+ */
 
 export const FilterBar: React.FC<FilterBarProps> = memo(({
     filters,
@@ -36,7 +45,6 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
     return (
         <div className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-4">
-                {/* Search */}
                 <div className="flex-1 space-y-2">
                     <Label htmlFor="search" className="sr-only">Search</Label>
                     <div className="relative">
@@ -51,8 +59,6 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                         />
                     </div>
                 </div>
-
-                {/* Status Filter */}
                 <div className="w-full sm:w-[180px] space-y-2">
                     <Label htmlFor="status-filter" className="sr-only">Status</Label>
                     <Select
@@ -64,14 +70,12 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Statuses</SelectItem>
-                            <SelectItem value={TaskStatus.TODO}>To Do</SelectItem>
-                            <SelectItem value={TaskStatus.IN_PROGRESS}>In Progress</SelectItem>
-                            <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
+                            <SelectItem value={TaskStatus.TODO}>{TaskStatus.TODO}</SelectItem>
+                            <SelectItem value={TaskStatus.IN_PROGRESS}>{TaskStatus.IN_PROGRESS}</SelectItem>
+                            <SelectItem value={TaskStatus.DONE}>{TaskStatus.DONE}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-
-                {/* Priority Filter */}
                 <div className="w-full sm:w-[180px] space-y-2">
                     <Label htmlFor="priority-filter" className="sr-only">Priority</Label>
                     <Select
@@ -83,15 +87,13 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Priorities</SelectItem>
-                            <SelectItem value={TaskPriority.HIGH}>High</SelectItem>
-                            <SelectItem value={TaskPriority.MEDIUM}>Medium</SelectItem>
-                            <SelectItem value={TaskPriority.LOW}>Low</SelectItem>
+                            <SelectItem value={TaskPriority.HIGH}>{TaskPriority.HIGH}</SelectItem>
+                            <SelectItem value={TaskPriority.MEDIUM}>{TaskPriority.MEDIUM}</SelectItem>
+                            <SelectItem value={TaskPriority.LOW}>{TaskPriority.LOW}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-
-                {/* Clear Filters */}
-                {hasActiveFilters && (
+                <Activity mode={hasActiveFilters ? 'visible' : 'hidden'}>
                     <Button
                         variant="outline"
                         size="default"
@@ -101,7 +103,7 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                         <X className="h-4 w-4 mr-2" />
                         Clear
                     </Button>
-                )}
+                </Activity>
             </div>
         </div>
     );

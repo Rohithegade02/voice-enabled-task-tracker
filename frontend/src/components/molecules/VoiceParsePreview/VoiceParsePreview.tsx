@@ -6,6 +6,18 @@ import type { VoiceParsePreviewProps } from './types';
 import { TranscriptDisplay } from './TranscriptDisplay';
 import { ParsedTaskFields } from './ParsedTaskFields';
 
+/**
+ * VoiceParsePreview component for displaying a voice parse preview.
+ * It shows a dialog with the parsed task data and a form to edit it.
+ *
+ * @param {VoiceParsePreviewProps} props - The props for the VoiceParsePreview component.
+ * @param {boolean} props.isOpen - Whether the dialog is open or not.
+ * @param {() => void} props.onClose - Callback function invoked when the dialog is closed.
+ * @param {ParsedTaskData} props.parsedData - The parsed task data to be displayed.
+ * @param {(data: CreateTaskDTO | UpdateTaskDTO) => void} props.onConfirm - Callback function invoked when the form is submitted.
+ * @param {boolean} props.isLoading - Whether the form is loading or not.
+ */
+
 export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = memo(({
     isOpen,
     onClose,
