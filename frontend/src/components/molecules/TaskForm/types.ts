@@ -1,4 +1,4 @@
-import type { CreateTaskDTO, Task, UpdateTaskDTO } from "@/types/task";
+import type { CreateTaskDTO, Task, UpdateTaskDTO } from "@/types";
 
 export interface TaskFormProps {
     isOpen: boolean;

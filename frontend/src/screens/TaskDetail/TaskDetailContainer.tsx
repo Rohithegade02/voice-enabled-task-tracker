@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TaskDetailPresentation } from './TaskDetailPresentation';
 import { useTasks } from '@/hooks';
-import { UpdateTaskDTO } from '@/types/task';
+import { UpdateTaskDTO } from '@/types';
 
 interface TaskDetailContainerProps {
     taskId: string;

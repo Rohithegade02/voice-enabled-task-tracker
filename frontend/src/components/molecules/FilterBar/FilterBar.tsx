@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { TaskStatus, TaskPriority } from '@/types/task';
+import { TaskStatus, TaskPriority } from '@/types';
 import { Input } from '@/components/atoms/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/select';
 import { Label } from '@/components/atoms/label';

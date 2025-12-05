@@ -1,4 +1,4 @@
-import type { TaskStatus, TaskPriority, ParsedVoiceInput } from "@/types/task";
+import type { TaskStatus, TaskPriority, ParsedVoiceInput } from "@/types";
 
 export interface VoiceParsePreviewProps {
     isOpen: boolean;

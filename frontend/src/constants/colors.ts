@@ -1,24 +1,28 @@
-import { TaskPriority, TaskStatus } from '@/types/task';
+import { TaskStatus, TaskPriority } from '@/types';
 
-export const PRIORITY_COLORS = {
+// Priority color mappings for badges
+export const PRIORITY_COLORS: Record<TaskPriority, 'default' | 'secondary' | 'destructive' | 'outline'> = {
     [TaskPriority.HIGH]: 'destructive',
     [TaskPriority.MEDIUM]: 'default',
     [TaskPriority.LOW]: 'secondary',
 } as const;
 
-export const STATUS_COLORS = {
-    [TaskStatus.TODO]: 'secondary',
+// Status color mappings for badges
+export const STATUS_COLORS: Record<TaskStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+    [TaskStatus.TODO]: 'outline',
     [TaskStatus.IN_PROGRESS]: 'default',
-    [TaskStatus.DONE]: 'outline',
+    [TaskStatus.DONE]: 'secondary',
 } as const;
 
-export const PRIORITY_LABELS = {
+// Priority labels
+export const PRIORITY_LABELS: Record<TaskPriority, string> = {
     [TaskPriority.HIGH]: 'High',
     [TaskPriority.MEDIUM]: 'Medium',
     [TaskPriority.LOW]: 'Low',
 } as const;
 
-export const STATUS_LABELS = {
+// Status labels
+export const STATUS_LABELS: Record<TaskStatus, string> = {
     [TaskStatus.TODO]: 'To Do',
     [TaskStatus.IN_PROGRESS]: 'In Progress',
     [TaskStatus.DONE]: 'Done',

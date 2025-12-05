@@ -1,4 +1,4 @@
-import { TaskStatus } from '@/types/task';
+import { TaskStatus } from '@/types';
 
 export const STATUS_COLORS: Record<TaskStatus, string> = {
     [TaskStatus.TODO]: 'border-t-secondary',

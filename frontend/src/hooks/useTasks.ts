@@ -1,67 +1,95 @@
 import { useState, useCallback } from 'react';
-import type { Task, CreateTaskDTO, UpdateTaskDTO, TaskFilters } from '@/types/task';
-import { taskApi } from '@/services/api/taskApi';
+import type { Task, CreateTaskDTO, UpdateTaskDTO, TaskFilters } from '@/types';
+import { taskApi, getErrorMessage } from '@/services/api';
 
-export const useTasks = () => {
+interface UseTasksReturn {
+    tasks: Task[];
+    isLoading: boolean;
+    error: string | null;
+    fetchTasks: (filters?: TaskFilters) => Promise<void>;
+    createTask: (data: CreateTaskDTO) => Promise<Task>;
+    updateTask: (id: string, data: UpdateTaskDTO) => Promise<Task>;
+    deleteTask: (id: string) => Promise<void>;
+    clearError: () => void;
+}
+
+/**
+ * Custom hook for managing task state and operations
+ * Provides CRUD operations with loading and error states
+ */
+export const useTasks = (): UseTasksReturn => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const clearError = useCallback(() => {
+        setError(null);
+    }, []);
+
     const fetchTasks = useCallback(async (filters?: TaskFilters) => {
         setIsLoading(true);
         setError(null);
+
         try {
             const data = await taskApi.getTasks(filters);
             setTasks(data);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
+            const message = getErrorMessage(err);
+            setError(message);
+            console.error('[useTasks] Fetch error:', err);
         } finally {
             setIsLoading(false);
         }
     }, []);
 
-    const createTask = useCallback(async (data: CreateTaskDTO) => {
+    const createTask = useCallback(async (data: CreateTaskDTO): Promise<Task> => {
         setIsLoading(true);
         setError(null);
+
         try {
             const newTask = await taskApi.createTask(data);
             setTasks((prev) => [newTask, ...prev]);
             return newTask;
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to create task';
+            const message = getErrorMessage(err);
             setError(message);
-            throw new Error(message);
+            console.error('[useTasks] Create error:', err);
+            throw err;
         } finally {
             setIsLoading(false);
         }
     }, []);
 
-    const updateTask = useCallback(async (id: string, data: UpdateTaskDTO) => {
+    const updateTask = useCallback(async (id: string, data: UpdateTaskDTO): Promise<Task> => {
         setIsLoading(true);
         setError(null);
+
         try {
             const updatedTask = await taskApi.updateTask(id, data);
             setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
             return updatedTask;
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to update task';
+            const message = getErrorMessage(err);
             setError(message);
-            throw new Error(message);
+            console.error('[useTasks] Update error:', err);
+            throw err;
         } finally {
             setIsLoading(false);
         }
     }, []);
 
-    const deleteTask = useCallback(async (id: string) => {
+    const deleteTask = useCallback(async (id: string): Promise<void> => {
         setIsLoading(true);
         setError(null);
+
         try {
             await taskApi.deleteTask(id);
             setTasks((prev) => prev.filter((task) => task.id !== id));
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to delete task';
+            const message = getErrorMessage(err);
             setError(message);
-            throw new Error(message);
+            console.error('[useTasks] Delete error:', err);
+            throw err;
         } finally {
             setIsLoading(false);
         }
@@ -75,5 +103,6 @@ export const useTasks = () => {
         createTask,
         updateTask,
         deleteTask,
+        clearError,
     };
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Task } from '@/types/task';
+import type { Task } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/atoms/table';
 import { Badge } from '@/components/atoms/badge';
 import { Button } from '@/components/atoms/button';

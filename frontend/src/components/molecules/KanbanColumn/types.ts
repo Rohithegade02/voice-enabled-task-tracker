@@ -1,4 +1,4 @@
-import type { Task, TaskStatus } from "@/types/task";
+import type { Task, TaskStatus } from "@/types";
 
 export interface KanbanColumnProps {
     title: string;

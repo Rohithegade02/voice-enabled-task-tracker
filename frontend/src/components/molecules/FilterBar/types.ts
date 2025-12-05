@@ -1,4 +1,4 @@
-import type { TaskFilters } from "@/types/task";
+import type { TaskFilters } from "@/types";
 
 export interface FilterBarProps {
     filters: TaskFilters;

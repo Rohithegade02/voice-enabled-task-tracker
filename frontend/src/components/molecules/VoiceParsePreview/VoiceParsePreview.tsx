@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TaskStatus, TaskPriority } from '@/types/task';
+import { TaskStatus, TaskPriority } from '@/types';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/atoms/dialog';
 import { Button } from '@/components/atoms/button';
 import { Input } from '@/components/atoms/input';

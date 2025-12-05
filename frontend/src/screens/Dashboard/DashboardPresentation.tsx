@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Task, type CreateTaskDTO, type UpdateTaskDTO, type TaskFilters, type ParsedVoiceInput, TaskStatus } from '@/types/task';
+import { type Task, type CreateTaskDTO, type UpdateTaskDTO, type TaskFilters, type ParsedVoiceInput, TaskStatus } from '@/types';
 import { Button } from '@/components/atoms/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/atoms/tabs';
 import { Plus, Mic, LayoutGrid, List as ListIcon } from 'lucide-react';
