@@ -27,7 +27,7 @@ export interface CreateTaskDTO {
     description?: string;
     status?: TaskStatus;
     priority?: TaskPriority;
-    dueDate?: string;
+    dueDate?: Date;
 }
 
 export interface UpdateTaskDTO {

@@ -52,7 +52,7 @@ export const DashboardContainer: React.FC = () => {
             setShowTaskForm(false);
         } catch (err) {
             // Error already handled by hook and displayed via toast
-            console.error('[DashboardContainer] Create task error:', err);
+            console.error(' Create task error:', err);
         }
     }, [createTask, setShowTaskForm]);
 
@@ -64,7 +64,7 @@ export const DashboardContainer: React.FC = () => {
             setEditingTask(null);
         } catch (err) {
             // Error already handled by hook and displayed via toast
-            console.error('[DashboardContainer] Update task error:', err);
+            console.error(' Update task error:', err);
         }
     }, [updateTask, setShowTaskForm, setEditingTask]);
 
@@ -78,7 +78,7 @@ export const DashboardContainer: React.FC = () => {
             toast.success('Task deleted successfully');
         } catch (err) {
             // Error already handled by hook and displayed via toast
-            console.error('[DashboardContainer] Delete task error:', err);
+            console.error(' Delete task error:', err);
         }
     }, [deleteTask]);
 
@@ -90,7 +90,7 @@ export const DashboardContainer: React.FC = () => {
             // Success - parsedData will be set and modal will open
         } catch (err) {
             // Error already handled by hook and displayed via toast
-            console.error('[DashboardContainer] Voice parsing error:', err);
+            console.error(' Voice parsing error:', err);
         }
     }, [parseVoice, setShowVoiceRecorder]);
 
@@ -101,7 +101,7 @@ export const DashboardContainer: React.FC = () => {
             toast.success('Task created from voice input');
         } catch (err) {
             // Error already handled by hook and displayed via toast
-            console.error('[DashboardContainer] Voice task creation error:', err);
+            console.error(' Voice task creation error:', err);
         }
     }, [createTask, resetParsing]);
 

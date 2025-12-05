@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TaskStatus, TaskPriority, type CreateTaskDTO, type UpdateTaskDTO } from '@/types';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/atoms/dialog';
 import { Button } from '@/components/atoms/button';
@@ -7,6 +7,7 @@ import { Textarea } from '@/components/atoms/textarea';
 import { Label } from '@/components/atoms/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/select';
 import type { TaskFormProps } from './types';
+import { DatePicker } from '../DatePicker';
 
 export const TaskForm: React.FC<TaskFormProps> = ({
     isOpen,
@@ -20,10 +21,33 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         description: initialData?.description || '',
         status: initialData?.status || TaskStatus.TODO,
         priority: initialData?.priority || TaskPriority.MEDIUM,
-        dueDate: initialData?.dueDate ? new Date(initialData.dueDate).toISOString().slice(0, 16) : '',
+        dueDate: initialData?.dueDate ? new Date(initialData.dueDate) : undefined
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Update form data when initialData changes (for edit mode)
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                title: initialData.title || '',
+                description: initialData.description || '',
+                status: initialData.status || TaskStatus.TODO,
+                priority: initialData.priority || TaskPriority.MEDIUM,
+                dueDate: initialData.dueDate ? new Date(initialData.dueDate) : undefined
+            });
+        } else {
+            // Reset form for create mode
+            setFormData({
+                title: '',
+                description: '',
+                status: TaskStatus.TODO,
+                priority: TaskPriority.MEDIUM,
+                dueDate: undefined
+            });
+        }
+        setErrors({});
+    }, [initialData, mode, isOpen]);
 
     const handleChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -74,7 +98,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
             description: '',
             status: TaskStatus.TODO,
             priority: TaskPriority.MEDIUM,
-            dueDate: '',
+            dueDate: undefined,
         });
         setErrors({});
         onClose();
@@ -131,7 +155,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                                 value={formData.status}
                                 onValueChange={(value) => handleChange('status', value)}
                             >
-                                <SelectTrigger id="status">
+                                <SelectTrigger className='w-full' id="status">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -148,7 +172,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                                 value={formData.priority}
                                 onValueChange={(value) => handleChange('priority', value)}
                             >
-                                <SelectTrigger id="priority">
+                                <SelectTrigger className='w-full' id="priority">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -161,12 +185,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="dueDate">Due Date</Label>
-                        <Input
-                            id="dueDate"
-                            type="datetime-local"
-                            value={formData.dueDate}
-                            onChange={(e) => handleChange('dueDate', e.target.value)}
+                        <DatePicker
+                            label="Due Date"
+                            date={formData.dueDate}
+                            setDate={(date) => setFormData(prev => ({ ...prev, dueDate: date }))}
                         />
                     </div>
 

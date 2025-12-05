@@ -1,7 +1,7 @@
 import React from 'react';
 import { type Task, type CreateTaskDTO, type UpdateTaskDTO, type TaskFilters, type ParsedVoiceInput, TaskStatus } from '@/types';
 import { Button } from '@/components/atoms/button';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/atoms/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs';
 import { Plus, Mic, LayoutGrid, List as ListIcon } from 'lucide-react';
 import {
     TaskForm,
@@ -76,7 +76,7 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
 
     const handleTaskSubmit = (data: CreateTaskDTO | UpdateTaskDTO) => {
         if (editingTask) {
-            onUpdateTask(editingTask.id, data);
+            onUpdateTask(editingTask.id, data as UpdateTaskDTO);
         } else {
             onCreateTask(data as CreateTaskDTO);
         }
