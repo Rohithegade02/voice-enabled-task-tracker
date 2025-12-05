@@ -109,16 +109,12 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
-        console.log("Drag Start Active", active);
         const task = tasks?.find(t => t.id === active.id);
         setActiveTask(task || null);
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
-
-        console.log("Active", active);
-        console.log("Over", over);
 
         if (!over) {
             setActiveTask(null);

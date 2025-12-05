@@ -61,22 +61,31 @@ export const useTasks = (): UseTasksReturn => {
     }, []);
 
     const updateTask = useCallback(async (id: string, data: UpdateTaskDTO): Promise<Task> => {
-        setIsLoading(true);
-        setError(null);
+        // Optimistic update - update UI immediately
+        const previousTasks = [...tasks];
+        const taskIndex = tasks.findIndex(t => t.id === id);
+
+        if (taskIndex !== -1) {
+            const optimisticTask = { ...tasks[taskIndex], ...data };
+            const newTasks = [...tasks];
+            newTasks[taskIndex] = optimisticTask;
+            setTasks(newTasks);
+        }
 
         try {
             const updatedTask = await taskApi.updateTask(id, data);
+            // Update with actual server response
             setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
             return updatedTask;
         } catch (err) {
+            // Rollback on error
+            setTasks(previousTasks);
             const message = getErrorMessage(err);
             setError(message);
             console.error('[useTasks] Update error:', err);
             throw err;
-        } finally {
-            setIsLoading(false);
         }
-    }, []);
+    }, [tasks]);
 
     const deleteTask = useCallback(async (id: string): Promise<void> => {
         setIsLoading(true);

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/atoms/button';
 import { Badge } from '@/components/atoms/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/atoms/dropdown-menu';
-import { MoreVertical, Calendar, Trash2, Edit, GripVertical } from 'lucide-react';
+import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
 import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
@@ -37,21 +37,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <Card
             ref={setNodeRef}
             style={style}
-            className="cursor-pointer hover:shadow-md transition-shadow"
+            {...listeners}
+            {...attributes}
+            className="cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow touch-none"
             onClick={handleCardClick}
         >
             <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-2">
-                    {/* Drag Handle */}
-                    <button
-                        {...listeners}
-                        {...attributes}
-                        className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded touch-none"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <GripVertical className="h-4 w-4 text-muted-foreground" />
-                    </button>
-
                     <div className="flex-1 space-y-1">
                         <CardTitle className="text-base font-semibold line-clamp-2">
                             {task.title}
