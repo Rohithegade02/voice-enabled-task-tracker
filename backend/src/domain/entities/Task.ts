@@ -25,20 +25,24 @@ export class Task {
   public validate(): string[] {
     const errors: string[] = [];
 
-    if (!this.title || this.title.trim().length === 0) {
-      errors.push('Title is required');
-    }
+    // if (!this.title || this.title.trim().length === 0) {
+    //   errors.push('Title is required');
+    // }
 
-    if (this.title && this.title.length > 200) {
-      errors.push('Title must be less than 200 characters');
-    }
+    // if (this.title && this.title.length > 200) {
+    //   errors.push('Title must be less than 200 characters');
+    // }
 
-    if (this.description && this.description.length > 1000) {
-      errors.push('Description must be less than 1000 characters');
-    }
+    // if (this.description && this.description.length > 1000) {
+    //   errors.push('Description must be less than 1000 characters');
+    // }
 
-    if (this.dueDate && isNaN(this.dueDate.getTime())) {
-      errors.push('Invalid due date');
+    // if (this.dueDate && isNaN(this.dueDate.getTime())) {
+    //   errors.push('Invalid due date');
+    // }
+
+    if (this.priority && !Object.values(TaskPriority).includes(this.priority)) {
+      errors.push('Invalid priority');
     }
 
     return errors;

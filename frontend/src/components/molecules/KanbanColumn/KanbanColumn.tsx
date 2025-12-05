@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDroppable } from '@dnd-kit/core';
 import { TaskCard } from '../TaskCard/TaskCard';
 import { cn } from '@/lib/utils';
 import type { KanbanColumnProps } from './types';
@@ -13,11 +14,15 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
     onDeleteTask,
     onStatusChange,
 }) => {
+    const { setNodeRef, isOver } = useDroppable({
+        id: status,
+    });
+
     return (
         <div className="flex flex-col h-full">
             {/* Column Header */}
             <div className={cn(
-                "border-t-4  border-gray-300 rounded-t-lg bg-card p-4 border-b",
+                "border-t-4 border-gray-300 rounded-t-lg bg-card p-4 border-b",
                 getColumnColor(status)
             )}>
                 <div className="flex items-center justify-between">
@@ -30,11 +35,17 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
                 </div>
             </div>
 
-            {/* Tasks Container */}
-            <div className="flex-1 p-4 space-y-3 overflow-y-auto bg-muted/20  rounded-b-lg">
+            {/* Tasks Container - Droppable Zone */}
+            <div
+                ref={setNodeRef}
+                className={cn(
+                    "flex-1 p-4 space-y-3 overflow-y-auto bg-muted/20 rounded-b-lg transition-colors",
+                    isOver && "bg-primary/10 ring-2 ring-primary/50"
+                )}
+            >
                 {tasks?.length === 0 ? (
                     <div className="flex items-center justify-center h-32 text-sm text-muted-foreground">
-                        No tasks
+                        {isOver ? "Drop here" : "No tasks"}
                     </div>
                 ) : (
                     tasks?.map((task) => (

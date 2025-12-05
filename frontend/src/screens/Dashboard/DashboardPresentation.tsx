@@ -1,4 +1,13 @@
 import React from 'react';
+import {
+    DndContext,
+    type DragEndEvent,
+    DragOverlay,
+    type DragStartEvent,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
 import { type Task, type CreateTaskDTO, type UpdateTaskDTO, type TaskFilters, type ParsedVoiceInput, TaskStatus } from '@/types';
 import { Button } from '@/components/atoms/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs';
@@ -10,7 +19,8 @@ import {
     FilterBar,
     KanbanColumn,
     TaskList,
-    EmptyState
+    EmptyState,
+    TaskCard
 } from '@/components/molecules';
 import { Skeleton } from '@/components/atoms/skeleton';
 
@@ -69,6 +79,17 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
     onCloseVoicePreview,
     onEditTask,
 }) => {
+    const [activeTask, setActiveTask] = React.useState<Task | null>(null);
+
+    // Configure drag sensors
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8, // 8px movement required to start drag
+            },
+        })
+    );
+
     // Group tasks for Kanban view
     const todoTasks = tasks?.filter(t => t.status === TaskStatus.TODO);
     const inProgressTasks = tasks?.filter(t => t.status === TaskStatus.IN_PROGRESS);
@@ -84,6 +105,39 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
 
     const handleStatusChange = (id: string, status: TaskStatus) => {
         onUpdateTask(id, { status });
+    };
+
+    const handleDragStart = (event: DragStartEvent) => {
+        const { active } = event;
+        console.log("Drag Start Active", active);
+        const task = tasks?.find(t => t.id === active.id);
+        setActiveTask(task || null);
+    };
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        console.log("Active", active);
+        console.log("Over", over);
+
+        if (!over) {
+            setActiveTask(null);
+            return;
+        }
+
+        const taskId = active.id as string;
+        const newStatus = over.id as TaskStatus;
+
+        // Update task status if dropped on a different column
+        if (newStatus && Object.values(TaskStatus).includes(newStatus)) {
+            handleStatusChange(taskId, newStatus);
+        }
+
+        setActiveTask(null);
+    };
+
+    const handleDragCancel = () => {
+        setActiveTask(null);
     };
 
     if (error) {
@@ -171,35 +225,57 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = ({
             ) : (
                 <>
                     {viewMode === 'kanban' ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-250px)] border-gray-200 min-h-[500px]">
-                            <KanbanColumn
-                                title="To Do"
-                                status={TaskStatus.TODO}
-                                tasks={todoTasks}
-                                onTaskClick={onEditTask}
-                                onEditTask={onEditTask}
-                                onDeleteTask={onDeleteTask}
-                                onStatusChange={handleStatusChange}
-                            />
-                            <KanbanColumn
-                                title="In Progress"
-                                status={TaskStatus.IN_PROGRESS}
-                                tasks={inProgressTasks}
-                                onTaskClick={onEditTask}
-                                onEditTask={onEditTask}
-                                onDeleteTask={onDeleteTask}
-                                onStatusChange={handleStatusChange}
-                            />
-                            <KanbanColumn
-                                title="Done"
-                                status={TaskStatus.DONE}
-                                tasks={doneTasks}
-                                onTaskClick={onEditTask}
-                                onEditTask={onEditTask}
-                                onDeleteTask={onDeleteTask}
-                                onStatusChange={handleStatusChange}
-                            />
-                        </div>
+                        <DndContext
+                            sensors={sensors}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            onDragCancel={handleDragCancel}
+                        >
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-250px)] border-gray-200 min-h-[500px]">
+                                <KanbanColumn
+                                    title="To Do"
+                                    status={TaskStatus.TODO}
+                                    tasks={todoTasks}
+                                    onTaskClick={onEditTask}
+                                    onEditTask={onEditTask}
+                                    onDeleteTask={onDeleteTask}
+                                    onStatusChange={handleStatusChange}
+                                />
+                                <KanbanColumn
+                                    title="In Progress"
+                                    status={TaskStatus.IN_PROGRESS}
+                                    tasks={inProgressTasks}
+                                    onTaskClick={onEditTask}
+                                    onEditTask={onEditTask}
+                                    onDeleteTask={onDeleteTask}
+                                    onStatusChange={handleStatusChange}
+                                />
+                                <KanbanColumn
+                                    title="Done"
+                                    status={TaskStatus.DONE}
+                                    tasks={doneTasks}
+                                    onTaskClick={onEditTask}
+                                    onEditTask={onEditTask}
+                                    onDeleteTask={onDeleteTask}
+                                    onStatusChange={handleStatusChange}
+                                />
+                            </div>
+
+                            {/* Drag Overlay */}
+                            <DragOverlay>
+                                {activeTask ? (
+                                    <div className="opacity-80 rotate-3 cursor-grabbing">
+                                        <TaskCard
+                                            task={activeTask}
+                                            onClick={() => { }}
+                                            onEdit={() => { }}
+                                            onDelete={() => { }}
+                                            onStatusChange={() => { }}
+                                        />
+                                    </div>
+                                ) : null}
+                            </DragOverlay>
+                        </DndContext>
                     ) : (
                         <TaskList
                             tasks={tasks}
