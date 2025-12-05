@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/car
 import { Badge } from '@/components/atoms/badge';
 import { ArrowLeft, Calendar, Clock, Trash2, Edit } from 'lucide-react';
 import { format } from 'date-fns';
-import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
+import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { TaskForm } from '@/components/molecules';
 
 interface TaskDetailPresentationProps {

@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
-import { API_BASE_URL } from '@/constants/api';
+import { API_BASE_URL } from '@/constants';
 import {
     ApiError,
     NetworkError,

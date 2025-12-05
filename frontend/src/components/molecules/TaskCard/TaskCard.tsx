@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/button';
 import { Badge } from '@/components/atoms/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/atoms/dropdown-menu';
 import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
-import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants/colors';
+import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
 

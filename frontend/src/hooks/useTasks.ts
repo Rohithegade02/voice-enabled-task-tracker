@@ -36,7 +36,7 @@ export const useTasks = (): UseTasksReturn => {
         } catch (err) {
             const message = getErrorMessage(err);
             setError(message);
-            console.error('[useTasks] Fetch error:', err);
+            console.error('Fetch error:', err);
         } finally {
             setIsLoading(false);
         }
@@ -53,7 +53,7 @@ export const useTasks = (): UseTasksReturn => {
         } catch (err) {
             const message = getErrorMessage(err);
             setError(message);
-            console.error('[useTasks] Create error:', err);
+            console.error('Create error:', err);
             throw err;
         } finally {
             setIsLoading(false);
@@ -82,7 +82,7 @@ export const useTasks = (): UseTasksReturn => {
             setTasks(previousTasks);
             const message = getErrorMessage(err);
             setError(message);
-            console.error('[useTasks] Update error:', err);
+            console.error('Update error:', err);
             throw err;
         }
     }, [tasks]);
@@ -97,7 +97,7 @@ export const useTasks = (): UseTasksReturn => {
         } catch (err) {
             const message = getErrorMessage(err);
             setError(message);
-            console.error('[useTasks] Delete error:', err);
+            console.error('Delete error:', err);
             throw err;
         } finally {
             setIsLoading(false);

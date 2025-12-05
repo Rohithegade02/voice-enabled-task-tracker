@@ -1,5 +1,5 @@
 import { client, type ApiResponse } from './client';
-import { API_ENDPOINTS } from '@/constants/api';
+import { API_ENDPOINTS } from '@/constants';
 import type {
     Task,
     CreateTaskDTO,
