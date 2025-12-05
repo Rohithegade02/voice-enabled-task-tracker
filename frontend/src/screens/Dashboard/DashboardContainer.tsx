@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { DashboardPresentation } from './DashboardPresentation';
 import { useTasks, useFilters, useDebounce, useVoiceParsing } from '@/hooks';
 import type { CreateTaskDTO, UpdateTaskDTO, Task } from '@/types';
 import { toast } from 'sonner';
 import { ConfirmDialog } from '@/components/molecules';
 
-export const DashboardContainer: React.FC = () => {
+export const DashboardContainer: React.FC = memo(() => {
     const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
     const [showTaskForm, setShowTaskForm] = useState<boolean>(false);
     const [showVoiceRecorder, setShowVoiceRecorder] = useState<boolean>(false);
@@ -169,4 +169,4 @@ export const DashboardContainer: React.FC = () => {
             />
         </React.Fragment>
     );
-};
+});
