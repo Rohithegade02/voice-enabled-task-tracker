@@ -44,11 +44,11 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex flex-col items-center py-8 space-y-6">
-                    <Button
+                    <button
                         onClick={isRecording ? stopRecording : startRecording}
                         disabled={!!error}
                         className={cn(
-                            "relative flex items-center justify-center w-24 h-24 rounded-full transition-all",
+                            "relative flex px-2 py-2 items-center justify-center w-24 h-24 rounded-full transition-all",
                             isRecording
                                 ? "bg-destructive hover:bg-destructive/90 animate-pulse"
                                 : "bg-primary hover:bg-primary/90",
@@ -56,29 +56,17 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
                         )}
                     >
                         {isRecording ? (
-                            <Square className="w-10 h-10 text-white" />
+                            <Square className="w-8 h-8 text-white" />
                         ) : (
-                            <Mic className="w-10 h-10 text-white" />
+                            <Mic className="w-8 h-8 text-white" />
                         )}
 
-                        <Activity mode={isRecording ? "visible" : "hidden"}>
-                            <span className="absolute -bottom-1 -right-1 flex h-6 w-6">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
-                                <span className="relative inline-flex rounded-full h-6 w-6 bg-destructive" />
-                            </span>
-                        </Activity>
-
-                    </Button>
+                    </button>
                     <Activity mode={isRecording ? "visible" : "hidden"} >
                         <div className="text-2xl font-mono font-semibold">
                             {formatTime(recordTime)}
                         </div>
                     </Activity>
-                    <p className="text-sm text-muted-foreground text-center">
-                        {isRecording
-                            ? "Recording... Click stop when finished."
-                            : "Click the microphone to start recording."}
-                    </p>
                     <Activity mode={error ? "visible" : "hidden"}>
                         <p className="text-sm text-destructive text-center">{error}</p>
                     </Activity>
