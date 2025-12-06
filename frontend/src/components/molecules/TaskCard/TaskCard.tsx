@@ -1,14 +1,16 @@
-import React, { Activity, memo } from 'react';
+import React, { memo } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/atoms/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/atoms/card';
 import { Button } from '@/components/atoms/button';
 import { Badge } from '@/components/atoms/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/atoms/dropdown-menu';
 import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
-import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
+import { TaskPriority } from '@/types';
+import { cn } from '@/lib/utils';
+import { getColumnIndicatorColor, getPriorityStyle } from '@/utils';
 
 /**
  * TaskCard component for displaying a task card.
@@ -20,6 +22,9 @@ import type { TaskCardProps } from './types';
  * @param {() => void} props.onDelete - Callback function invoked when the task is deleted.
  * @param {() => void} props.onClick - Callback function invoked when the task card is clicked.
  */
+
+
+
 
 export const TaskCard: React.FC<TaskCardProps> = memo(({
     task,
@@ -50,27 +55,22 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
             style={style}
             {...listeners}
             {...attributes}
-            className="cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow touch-none"
+            className="cursor-grab active:cursor-grabbing hover:shadow-lg transition-all touch-none border border-border/50"
             onClick={handleCardClick}
         >
-            <CardHeader className="pb-3">
-                <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 space-y-1">
-                        <CardTitle className="text-base font-semibold line-clamp-2">
-                            {task.title}
-                        </CardTitle>
-                        {task.description && (
-                            <CardDescription className="line-clamp-2 text-sm">
-                                {task.description}
-                            </CardDescription>
-                        )}
-                    </div>
+            <CardHeader className="pb-2 pt-3 px-2">
+                <div className="flex items-start justify-between gap-2 mb-2">
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon-sm" onClick={(e) => e.stopPropagation()}>
-                                <MoreVertical className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center justify-between w-full">
+                                <div className={`${getColumnIndicatorColor(task.status)} text-white px-2 py-1 rounded text-xs`}>
+                                    {task.status}
+                                </div>
+                                <Button variant="ghost" size="icon-sm" className="h-6 w-6 -mt-1" onClick={(e) => e.stopPropagation()}>
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem
@@ -95,30 +95,42 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+
+                <CardTitle className="text-sm font-semibold line-clamp-1 leading-tight">
+                    {task.title}
+                </CardTitle>
+                {task.description && (
+                    <CardDescription className="line-clamp-2 text-xs mt-1 leading-snug">
+                        {task.description}
+                    </CardDescription>
+                )}
             </CardHeader>
 
-            <CardContent className="pb-3">
-                <div className="flex flex-wrap gap-2">
-                    <Badge variant={PRIORITY_COLORS[task.priority]}>
+            <CardContent className="pb-2 flex justify-between items-center px-2 space-y-2">
+                {task.dueDate && (
+                    <div className={cn(
+                        "flex items-center mt-2 gap-1 text-[11px]",
+                        task.isOverdue ? 'text-destructive' : 'text-muted-foreground'
+                    )}>
+                        <Calendar className="h-3 w-3" />
+                        <span>
+                            {format(new Date(task.dueDate), 'dd MMM yyyy')}
+                        </span>
+                    </div>
+                )}
+                <div>
+                    <Badge
+                        variant="outline"
+                        className={cn(
+                            "text-[10px] font-semibold px-2 py-0.5 border-0 rounded",
+                            getPriorityStyle(task.priority)
+                        )}
+                    >
                         {task.priority}
-                    </Badge>
-                    <Badge variant={STATUS_COLORS[task.status]}>
-                        {task.status}
                     </Badge>
                 </div>
             </CardContent>
 
-            <Activity mode={task.dueDate ? 'visible' : 'hidden'}>
-                <CardFooter className="pt-0">
-                    <div className={`flex items-center gap-1 text-sm ${task.isOverdue ? 'text-destructive' : 'text-muted-foreground'}`}>
-                        <Calendar className="h-3.5 w-3.5" />
-                        <span>
-                            {task.dueDate && format(new Date(task.dueDate), 'MMM d, yyyy')}
-                            {task.isOverdue && ' (Overdue)'}
-                        </span>
-                    </div>
-                </CardFooter>
-            </Activity>
         </Card>
     );
 });

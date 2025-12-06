@@ -3,7 +3,7 @@ import { Toaster } from '@/components/atoms/sonner';
 
 function App() {
   return (
-    <div className="min-h-screen  font-sans antialiased">
+    <div className="min-h-screen bg-white font-sans">
       <Dashboard />
       <Toaster />
     </div>

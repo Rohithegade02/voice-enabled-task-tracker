@@ -10,7 +10,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -47,6 +47,32 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Kanban Board Colors */
+  --kanban-todo: #FF9500;
+  --kanban-todo-light: #FFF4E6;
+  --kanban-in-progress: #007AFF;
+  --kanban-in-progress-light: #E6F2FF;
+  --kanban-done: #FF2D55;
+  --kanban-done-light: #FFE6EC;
+
+  /* Status Label Colors */
+  --status-not-started: #5856D6;
+  --status-not-started-bg: #EEEEFF;
+  --status-in-research: #FF9500;
+  --status-in-research-bg: #FFF4E6;
+  --status-on-track: #FF2D55;
+  --status-on-track-bg: #FFE6EC;
+  --status-complete: #34C759;
+  --status-complete-bg: #E6F9EC;
+
+  /* Priority Colors */
+  --priority-low: #007AFF;
+  --priority-low-bg: #E6F2FF;
+  --priority-medium: #FF9500;
+  --priority-medium-bg: #FFF4E6;
+  --priority-high: #FF3B30;
+  --priority-high-bg: #FFE6E5;
 }
 
 a {
@@ -63,6 +89,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: white;
 }
 
 @theme inline {

@@ -77,7 +77,7 @@ export const VoiceParsePreview: React.FC<VoiceParsePreviewProps> = memo(({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[600px] overflow-y-auto">
+            <DialogContent className="sm:max-w-[600px] bg-white overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Parsed Task</DialogTitle>
                     <DialogDescription>

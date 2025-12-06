@@ -21,7 +21,7 @@ const DashboardKanbanView = memo(({
             onDragEnd={handleDragEnd}
             onDragCancel={handleDragCancel}
         >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100vh-250px)] border-gray-200 min-h-[500px]">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 h-[calc(100vh-250px)] min-h-[500px]">
                 {
                     columns.map((column) => (
                         <KanbanColumn

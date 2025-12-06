@@ -119,7 +119,7 @@ export const TaskForm: React.FC<TaskFormProps> = memo(({
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] bg-white">
                 <DialogHeader>
                     <DialogTitle>{mode === 'create' ? 'Create New Task' : 'Edit Task'}</DialogTitle>
                     <DialogDescription>

@@ -7,6 +7,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { format } from 'date-fns';
 import type { TaskListItemProps, TaskListProps } from './types';
+import { getPriorityStyle } from '@/utils';
+import { cn } from '@/lib/utils';
 
 /**
  * TaskListItem component for displaying a task list item.
@@ -44,7 +46,13 @@ export const TaskListItem: React.FC<TaskListItemProps> = memo(({
                 </Badge>
             </TableCell>
             <TableCell>
-                <Badge variant={PRIORITY_COLORS[task.priority]}>
+                <Badge
+                    variant="outline"
+                    className={cn(
+                        "text-xs font-semibold px-2 py-0.5 border-0 rounded-full",
+                        getPriorityStyle(task.priority)
+                    )}
+                >
                     {task.priority}
                 </Badge>
             </TableCell>

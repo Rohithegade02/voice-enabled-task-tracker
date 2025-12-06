@@ -36,7 +36,7 @@ export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[400px]">
+            <DialogContent className="sm:max-w-[400px] bg-white">
                 <DialogHeader>
                     <DialogTitle>Voice Input</DialogTitle>
                     <DialogDescription>
