@@ -2,6 +2,8 @@
 
 A full-stack application for managing tasks with voice command capabilities.
 
+## How it works / System Flow
+
 ```mermaid
 graph TD
     A["User clicks 'Voice Input'"] --> B["Browser MediaRecorder starts (FREE, INSTANT)"]
