@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
 import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { format } from 'date-fns';
+import { useTaskCard } from './useTaskCard';
 import type { TaskCardProps } from './types';
 
 /**
@@ -27,6 +28,15 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
     onDelete,
     onClick,
 }) => {
+    // Business logic hook
+    const { handleEdit, handleDelete, handleCardClick } = useTaskCard({
+        task,
+        onEdit,
+        onDelete,
+        onClick,
+    });
+
+    // Drag and drop
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: task.id,
     });
@@ -34,14 +44,6 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
     const style = {
         transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : 1,
-    };
-
-    const handleCardClick = (e: React.MouseEvent) => {
-        // Don't trigger onClick if clicking on buttons or dropdown
-        if ((e.target as HTMLElement).closest('button')) {
-            return;
-        }
-        onClick?.(task);
     };
 
     return (
@@ -76,7 +78,7 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
                             <DropdownMenuItem
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    onEdit(task);
+                                    handleEdit();
                                 }}
                             >
                                 <Edit className="mr-2 h-4 w-4" />
@@ -85,7 +87,7 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
                             <DropdownMenuItem
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    onDelete(task.id);
+                                    handleDelete();
                                 }}
                                 className="text-destructive"
                             >
