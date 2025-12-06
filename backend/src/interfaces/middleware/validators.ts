@@ -18,17 +18,17 @@ export const validateCreateTask = (
     throw new AppError(400, 'Title must be less than 200 characters');
   }
 
-  // Validate status if provided
+  // Validate status 
   if (status && !Object.values(TaskStatus).includes(status)) {
     throw new AppError(400, `Invalid status. Must be one of: ${Object.values(TaskStatus).join(', ')}`);
   }
 
-  // Validate priority if provided
+  // Validate priority 
   if (priority && !Object.values(TaskPriority).includes(priority)) {
     throw new AppError(400, `Invalid priority. Must be one of: ${Object.values(TaskPriority).join(', ')}`);
   }
 
-  // Validate dueDate if provided
+  // Validate dueDate 
   if (dueDate) {
     const date = new Date(dueDate);
     if (isNaN(date.getTime())) {
@@ -46,7 +46,7 @@ export const validateUpdateTask = (
 ) => {
   const { title, status, priority, dueDate, description } = req.body;
 
-  // At least one field must be provided
+  // At least one field must be provided  
   if (!title && !status && !priority && !dueDate && !description) {
     throw new AppError(400, 'At least one field must be provided for update');
   }
@@ -61,22 +61,22 @@ export const validateUpdateTask = (
     }
   }
 
-  // Validate description if provided
+  // Validate description 
   if (description !== undefined && description.length > 1000) {
     throw new AppError(400, 'Description must be less than 1000 characters');
   }
 
-  // Validate status if provided
+  // Validate status 
   if (status && !Object.values(TaskStatus).includes(status)) {
     throw new AppError(400, `Invalid status. Must be one of: ${Object.values(TaskStatus).join(', ')}`);
   }
 
-  // Validate priority if provided
+  // Validate priority 
   if (priority && !Object.values(TaskPriority).includes(priority)) {
     throw new AppError(400, `Invalid priority. Must be one of: ${Object.values(TaskPriority).join(', ')}`);
   }
 
-  // Validate dueDate if provided
+  // Validate dueDate 
   if (dueDate) {
     const date = new Date(dueDate);
     if (isNaN(date.getTime())) {

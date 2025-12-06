@@ -2,16 +2,14 @@ import multer from 'multer';
 import { Request } from 'express';
 import { AppError } from './errorHandler';
 
-// Configure multer for memory storage (store file in memory as Buffer)
+// Configure multer for memory storage 
 const storage = multer.memoryStorage();
 
-// File filter - only accept audio files
 const fileFilter = (
   req: Request,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  // Accept audio files
   const allowedMimeTypes = [
     'audio/wav',
     'audio/wave',
@@ -31,11 +29,10 @@ const fileFilter = (
   }
 };
 
-// Configure upload
 export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB max file size
+    fileSize: 10 * 1024 * 1024, // 10MB size
   },
 });

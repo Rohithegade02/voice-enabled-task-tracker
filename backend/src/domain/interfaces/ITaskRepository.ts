@@ -1,6 +1,6 @@
 import { Task } from '../entities/Task';
 import { CreateTaskDTO, UpdateTaskDTO, TaskFilters } from '../../types';
-
+// task repository interface
 export interface ITaskRepository {
   create(taskData: CreateTaskDTO): Promise<Task>;
   findById(id: string): Promise<Task | null>;

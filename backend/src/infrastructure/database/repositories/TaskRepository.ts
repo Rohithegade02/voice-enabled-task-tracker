@@ -4,16 +4,19 @@ import { CreateTaskDTO, UpdateTaskDTO, TaskFilters } from '../../../types';
 import { TaskModel, ITaskDocument } from '../models/TaskModel';
 
 export class TaskRepository implements ITaskRepository {
+  // create task
   async create(taskData: CreateTaskDTO): Promise<Task> {
     const taskDoc = await TaskModel.create(taskData);
     return this.mapToEntity(taskDoc);
   }
 
+  // find task by id
   async findById(id: string): Promise<Task | null> {
     const taskDoc = await TaskModel.findById(id);
     return taskDoc ? this.mapToEntity(taskDoc) : null;
   }
 
+  // find all tasks
   async findAll(filters?: TaskFilters): Promise<Task[]> {
     const query: any = {};
 
@@ -43,6 +46,7 @@ export class TaskRepository implements ITaskRepository {
     return taskDocs.map((doc) => this.mapToEntity(doc));
   }
 
+  // update task
   async update(id: string, taskData: UpdateTaskDTO): Promise<Task | null> {
     const taskDoc = await TaskModel.findByIdAndUpdate(
       id,
@@ -52,6 +56,7 @@ export class TaskRepository implements ITaskRepository {
     return taskDoc ? this.mapToEntity(taskDoc) : null;
   }
 
+  // delete task
   async delete(id: string): Promise<boolean> {
     const result = await TaskModel.findByIdAndDelete(id);
     return result !== null;

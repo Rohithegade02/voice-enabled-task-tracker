@@ -10,7 +10,6 @@ const geminiKey = process.env.GEMINI_API_KEY;
 
 export const config = {
   port,
-  nodeEnv: process.env.NODE_ENV || 'development',
   mongodb: {
     uri: mongodbUri
   },
@@ -25,5 +24,5 @@ const requiredEnvVars = ['ASSEMBLYAI_API_KEY', 'GEMINI_API_KEY'];
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  console.warn(`⚠️  Warning: Missing environment variables: ${missingEnvVars.join(', ')}`);
+  console.warn(`Missing environment variables: ${missingEnvVars.join(', ')}`);
 }

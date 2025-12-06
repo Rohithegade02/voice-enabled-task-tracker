@@ -1,28 +1,27 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { config } from '../../config/env';
 import { ParsedVoiceInput, TaskPriority, TaskStatus } from '../../types';
+import { AppError } from '../../interfaces/middleware/errorHandler';
 import { parseISO, addDays, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday } from 'date-fns';
 
 export class GeminiParserService {
-  private client: GoogleGenAI;
+  private client: GoogleGenerativeAI;
   private readonly modelName = 'gemini-2.5-flash';
 
   constructor() {
-    this.client = new GoogleGenAI({ apiKey: config.ai.geminiKey });
+    this.client = new GoogleGenerativeAI(config.ai.geminiKey!);
   }
 
   async parseTaskFromTranscript(transcript: string): Promise<ParsedVoiceInput> {
     try {
       const prompt = this.buildPrompt(transcript);
-      const result = await this.client.models.generateContent({
-        model: this.modelName,
-        contents: prompt,
-      });
+      const model = this.client.getGenerativeModel({ model: this.modelName });
+      const result = await model.generateContent(prompt);
 
-      const text = result.text;
+      const text = result.response.text();
       const jsonMatch = text?.match(/\{[\s\S]*\}/);
-      
-      if (!jsonMatch) throw new Error('No JSON found in response');
+
+      if (!jsonMatch) throw new AppError(500, 'No JSON found in response');
 
       const parsed = JSON.parse(jsonMatch[0]);
 

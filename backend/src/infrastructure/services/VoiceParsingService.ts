@@ -2,6 +2,7 @@ import { ParsedVoiceInput } from '../../types';
 import { IVoiceParsingService } from '../../domain/interfaces/IAIService';
 import { AssemblyAIService } from './AssemblyAIService';
 import { GeminiParserService } from './GeminiParserService';
+import { AppError } from '../../interfaces/middleware/errorHandler';
 
 export class VoiceParsingService implements IVoiceParsingService {
   private assemblyAI: AssemblyAIService;
@@ -17,10 +18,10 @@ export class VoiceParsingService implements IVoiceParsingService {
     const transcript = await this.assemblyAI.transcribeAudio(audioBuffer);
 
     if (!transcript || transcript.trim().length === 0) {
-      throw new Error('No speech detected in audio');
+      throw new AppError(400, 'No speech detected in audio');
     }
 
-    // Step 2: Parse transcript to structured task (Gemini)
+    // Step 2: Parse transcript to structured task (Gemini 2.5 model(free model))
     const parsedTask = await this.gemini.parseTaskFromTranscript(transcript);
 
     return parsedTask;
