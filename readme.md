@@ -2,6 +2,19 @@
 
 A full-stack application for managing tasks with voice command capabilities.
 
+```mermaid
+graph TD
+    A[User clicks "Voice Input"] --> B[Browser MediaRecorder starts FREE, INSTANT]
+    B --> C[User speaks into microphone]
+    C --> D[User clicks "Stop"]
+    D --> E[Frontend creates audio Blob]
+    E --> F[Frontend sends to YOUR backend]
+    F --> G[Backend → AssemblyAI transcribe]
+    G --> H[Backend → Gemini AI parse]
+    H --> I[Backend → Frontend structured task]
+    I --> J[User reviews and confirms]
+```
+
 ## 1. Project Setup
 
 ### a. Prerequisites
