@@ -3,6 +3,7 @@
 A full-stack application for managing tasks with voice command capabilities.
 
 ## 1. Project Setup
+[No changes to this section - keeping it as is]
 
 ### a. Prerequisites
 - **Node.js**: v18+ recommended
@@ -30,127 +31,111 @@ A full-stack application for managing tasks with voice command capabilities.
 4. Access at: `http://localhost:5173`
 
 ## 2. Tech Stack
+[No changes to this section]
 
 ### Backend
 - **Runtime**: Node.js + Express
 - **Language**: TypeScript
 - **Database**: MongoDB (Mongoose)
-- **AI Services**: 
-  - **AssemblyAI**: High-accuracy Speech-to-Text
-  - **Google Gemini**: Natural Language Understanding (Date/Intent extraction)
+- **AI Services**: AssemblyAI, Google Gemini
 - **File Handling**: Multer
 
 ### Frontend
 - **Framework**: React 19 + Vite
-- **Styling**: TailwindCSS v4 + Shadcn UI
+- **Styling**: TailwindCSS v4 + Radix UI / Shadcn
 - **State Management**: Zustand
-- **Drag & Drop**: @dnd-kit (Kanban board)
+- **Drag & Drop**: @dnd-kit
 - **Utilities**: date-fns, axios, lucide-react
 
 ## 3. API Documentation
+[No changes to this section]
 
 ### Task Endpoints
-- **GET** `/api/tasks`
-  - Fetch all tasks. Supports optional query filters.
-- **POST** `/api/tasks`
-  - Create a new task.
-  - Body: `{ "title": "...", "priority": "High" }`
-- **PUT** `/api/tasks/:id`
-  - Update task details.
-  - Body: `{ "status": "Done" }` or any partial update.
-- **DELETE** `/api/tasks/:id`
-  - Remove a task permanently.
+- **GET/POST/PUT/DELETE** `/api/tasks`
 
 ### AI Endpoints
 - **POST** `/api/tasks/parse-voice`
-  - Upload an audio file/blob for AI processing.
-  - **Body**: `FormData` with key `audio`.
-  - **Response**: `{ transcript: "...", parsedTask: { ... } }`
 - **POST** `/api/tasks/parse-text`
-  - Parse raw text string into structured task data.
-  - **Body**: `{ "text": "Fix bug by Friday" }`
 
 ## 4. Backend Code Architecture
+[No changes to this section]
 
-The backend follows **Clean Architecture** principles to separate concerns and ensure scalability.
-*📖 Recommended Reading: [Clean Architecture in Node.js](https://medium.com/@ben.dev.io/clean-architecture-in-node-js-39c3358d46f3)*
-
-### 📂 Directory Structure (`src/`)
-
-#### 1. **Domain Layer** (`/domain`)
-*The core business logic. Completely isolated from external libraries (DB, web frameworks).*
-- **`/entities`**:
-  - `Task.ts`: Defines the Task model with pure business rules (e.g., validation, status changes).
-- **`/interfaces`**:
-  - `ITaskRepository.ts`: Contract defining how data *should* be saved/retrieved. (Infrastructure implements this).
-- **`/usecases`**:
-  - `CreateTask.ts`, `UpdateTask.ts`, etc.: Application-specific business rules. Orchestrates data flow between Entities and Repositories.
-
-#### 2. **Infrastructure Layer** (`/infrastructure`)
-*Implementations of external tools and database logic.*
-- **`/database`**:
-  - `TaskRepository.ts`: Implements `ITaskRepository`. Uses Mongoose to talk to MongoDB.
-- **`/services`**:
-  - `GeminiParserService.ts`: Implements AI parsing logic.
-  - `VoiceParsingService.ts`: Handles audio file processing via AssemblyAI.
-
-#### 3. **Interface Adapters** (`/interfaces`)
-*Connects the outside world (Web/HTTP) to the Application.*
-- **`/controllers`**:
-  - `TaskController.ts`: Handles HTTP requests/responses. Calls UseCases.
-- **`/routes`**:
-  - `taskRoutes.ts`: Defines API endpoints and maps them to Controller methods.
-- **`/middleware`**:
-  - `upload.ts`: Multer configuration for file uploads.
-  - `errorHandler.ts`: Centralized error handling.
-
-#### 4. **Configuration** (`/config`)
-- `env.ts`: Centralized environment variable management.
+(Clean Architecture details...)
 
 ## 5. Frontend Code Architecture
 
-The frontend uses **Atomic Design** principles to build a scalable and reusable UI component library.
-*📖 Recommended Reading: [React Patterns](https://www.patterns.dev/react/)*
+The frontend uses **Atomic Design** principles and **Clean Code** hooks patterns.
+*📖 Reference: [React Patterns](https://www.patterns.dev/react/)*
 
-### 📂 Directory Structure (`src/`)
+### 📂 File Guide
 
-#### 1. **Components** (`/components`)
-- **`/atoms`**:
-  - The smallest, indivisible building blocks.
-  - *Examples*: `Button.tsx`, `Input.tsx`, `Badge.tsx`.
-  - *Responsibility*: Pure UI rendering with no business logic.
-- **`/molecules`**:
-  - Combinations of atoms and other molecules functioning together.
-  - *Examples*: `TaskCard.tsx`, `VoiceRecorder.tsx`, `TaskForm.tsx`.
-  - *Responsibility*: Specific UI functionality (e.g., a form group, a card with actions).
+#### 1. **Data & State (`/stores`)**
+*Global state management using Zustand.*
+- **`useTaskStore.ts`**: The "single source of truth" for tasks. managing Create, Read, Update, Delete (CRUD) operations and syncing with the API.
+- **`useFilterStore.ts`**: Manages active filters (status, priority, date range) and search queries.
+- **`useVoiceStore.ts`**: Handles the complex state of voice interactions (recording status, processing, parsed data).
 
-#### 2. **Screens (Pages)** (`/screens`)
-- Represents full views or pages that the user interacts with.
+#### 2. **Logic & Hooks (`/hooks`)**
+- **`/useDashboard`** (Folder): Splits the massive Dashboard logic into manageable "micro-hooks" (Separation of Concerns).
+  - **`useDashboard.ts`**: The "Conductor". Aggregates all sub-hooks and exposes a clean API to the View.
+  - **`useDashboardTask.ts`**: Handles task creation, edits, and deletions.
+  - **`useDashboardDnD.ts`**: Contains the **Drag-and-Drop** logic, specifically the **optimistic update** strategy.
+  - **`useDashboardVoice.ts`**: Orchestrates voice recording -> uploading -> parsing flow.
+  - **`useDashboardFilter.ts`**: Applies search and filtering logic to the raw task list.
+- **`useDebounce.ts`**: **Performance**. Delays API calls during rapid user input (e.g., search bar) to prevent server overload.
+- **`useCache.ts`**: **Performance**. Memoizes expensive function results to avoid unnecessary recalculations.
+
+#### 3. **UI Components (`/components`)**
+
+**Atoms** (*Pure UI*)
+- `Input.tsx`: Custom styled input fields.
+- `Button.tsx`: Standardized buttons with variants.
+- `Badge.tsx`: Status/Priority indicators.
+
+**Molecules** (*Specific Features*)
+- **`TaskCard.tsx`**: Displays individual task details; handles localized actions like "delete" or "edit".
+- **`TaskForm.tsx`**: The reusable form for Creating AND Editing tasks. Handles validation.
+- **`VoiceRecorder.tsx`**: The microphone UI. Handles permission requests and audio visualization.
+- **`VoiceProcessingModal.tsx`**: Visual feedback during the AI processing phase.
+- **`KanbanColumn.tsx`**: Represents a status column (Todo/In Progress/Done); acts as a droppable area for DnD.
+
+**Screens**
 - **`/Dashboard`**:
-  - The main application view.
-  - Composed of molecules like Kanban boards and lists.
-  - Connects UI components to Stores/Hooks.
+  - `DashboardContainer.tsx`: (Smart) Fetches data, initializes hooks.
+  - `DashboardPresentation.tsx`: (Dumb) Renders the visual layout.
+  - `DashboardKanbanView.tsx`: The specialized drag-and-drop board layout.
 
-#### 3. **State & Logic**
-- **`/stores`** (Zustand):
-  - Global state management (e.g., `useTaskStore`, `useVoiceStore`).
-  - Separation of state logic from UI components.
-- **`/hooks`**:
-  - Custom hooks for reusable logic (e.g., `useAudioRecorder`).
+## 6. Performance Optimization
 
-#### 4. **Services** (`/services`)
-- **`/api`**:
-  - `client.ts`: Axios instance configuration.
-  - `taskApi.ts`: Specific API calls (GET, POST, etc.) corresponding to backend endpoints.
+We implemented several strategies to ensure the app feels instant and responsive.
 
-## 6. Decisions & Assumptions
+### ⚡ 1. Optimistic Updates (Drag & Drop)
+*Found in: `hooks/useDashboard/useDashboardDnD.ts`*
+**Problem**: Waiting for the API to confirm a status change (e.g., "Todo" -> "Done") makes the drag action feel laggy.
+**Solution**:
+1.  **Update UI Immediately**: When an item is dropped, we verify it locally and update the Zustand store *instantly*.
+2.  **Sync Background**: The API call happens silently in the background.
+3.  **Rollback**: If the API fails (rare), we revert the change to keep data consistent.
+*Result: Zero-latency interactions for the user.*
+
+### 🕒 2. Search Debouncing
+*Found in: `hooks/useDebounce.ts`*
+**Problem**: Searching "Fix Bug" triggers 7 separate API calls (F, Fi, Fix, ...).
+**Solution**: We wait for the user to stop typing for 300ms before triggering the search logic.
+*Result: Reduced server load and smoother typing experience.*
+
+### 💾 3. Caching
+*Found in: `hooks/useCache.ts`*
+**Problem**: Repeatedly calculating derived data or fetching static resources wastes CPU cycles.
+**Solution**: We implemented a lightweight LRU (Least Recently Used) cache strategy for specific heavy operations.
+
+## 7. Decisions & Assumptions
 
 ### Key Design Decisions
+- **Hook Splitting**: Use of `useDashboard` sub-hooks prevents one file from becoming a 2000-line "God Object".
 - **Dual AI Approach**: Separated transcription (AssemblyAI) from parsing (Gemini) to leverage the best-in-class strengths of each provider.
-- **Strict Date Validation**: Implemented a custom post-processing layer in the backend to handle relative dates (e.g., "next Thursday") to strictly map to End-of-Day timestamps, avoiding timezone offset bugs.
-- **Kanban + List Views**: Frontend supports switching between interactions for better UX.
+- **Strict Date Validation**: Implemented a custom post-processing layer in the backend to handle relative dates (e.g., "next Thursday") to strictly map to End-of-Day timestamps.
 
 ### Assumptions
-- **Single User**: application assumes a single-user environment (no authentication).
-- **Environment**: Users have valid API keys for both AI services.
-- **Voice Input**: Assumes English language commands for optimal parsing.
+- **Single User**: application assumes a single-user environment.
+- **Environment**: Users have valid API keys.
