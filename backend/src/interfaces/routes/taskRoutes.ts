@@ -15,7 +15,6 @@ export const createTaskRoutes = (taskController: TaskController): Router => {
   );
 
   // GET /api/tasks - Get all tasks with optional filters
-  // Query params: ?status=To Do&priority=High&search=keyword&dueDateFrom=2024-01-01&dueDateTo=2024-12-31
   router.get('/', asyncHandler(taskController.getTasks));
 
   // GET /api/tasks/:id - Get single task
@@ -38,11 +37,11 @@ export const createTaskRoutes = (taskController: TaskController): Router => {
     upload.single('audio'),
     asyncHandler(taskController.parseVoiceInput)
   );
-  // POST /api/tasks/parse-text - Parse text inputrouter.post(
+  // POST /api/tasks/parse-text - Parse text input(
   router.post(
     '/parse-text',
-  asyncHandler(taskController.parseTextInput)
-);
+    asyncHandler(taskController.parseTextInput)
+  );
 
   return router;
 };
