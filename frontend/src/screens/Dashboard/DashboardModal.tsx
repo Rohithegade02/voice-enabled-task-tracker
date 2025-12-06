@@ -1,4 +1,5 @@
 import { TaskForm, VoiceParsePreview, VoiceRecorder } from '@/components/molecules'
+import { VoiceProcessingModal } from '@/components/molecules/VoiceProcessingModal'
 import React from 'react'
 import type { DashboardModalProps } from './types'
 
@@ -30,6 +31,8 @@ const DashboardModal = ({
                 onClose={onCloseVoiceRecorder}
                 onRecordingComplete={onVoiceRecordingComplete}
             />
+
+            <VoiceProcessingModal isOpen={isParsingVoice && !parsedVoiceData} />
 
             {parsedVoiceData && (
                 <VoiceParsePreview

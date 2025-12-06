@@ -23,6 +23,7 @@ export const useDashboardVoice = ({
     voiceStore,
     taskStore,
     setShowVoiceRecorder,
+
 }: UseDashboardVoiceProps) => {
     const {
         error: voiceError,
@@ -68,8 +69,15 @@ export const useDashboardVoice = ({
         [createTask, resetParsing]
     );
 
+    // handle closing voice preview modal
+    const handleCloseVoicePreview = useCallback(() => {
+        console.log('Closing voice preview');
+        resetParsing();
+    }, [resetParsing]);
+
     return {
         handleVoiceRecordingComplete,
         handleVoiceParseConfirm,
+        onCloseVoicePreview: handleCloseVoicePreview,
     };
 };

@@ -12,7 +12,7 @@ import {
 // API Response wrapper type
 export interface ApiResponse<T> {
     success: boolean;
-    data: T;
+    data: T; // generic type
     count?: number;
     error?: {
         message: string;

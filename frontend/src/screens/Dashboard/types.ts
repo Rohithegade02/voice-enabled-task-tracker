@@ -1,3 +1,7 @@
+import type { useDashboardFilters } from "@/hooks/useDashboard/useDashboardFilter";
+import type { useDashboardTasks } from "@/hooks/useDashboard/useDashboardTask";
+import type { useDashboardVoice } from "@/hooks/useDashboard/useDashboardVoice";
+import type { useFilterStore, useVoiceStore } from "@/stores";
 import type { CreateTaskDTO, ParsedVoiceInput, Task, TaskFilters, TaskStatus, UpdateTaskDTO } from "@/types";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 
@@ -90,4 +94,35 @@ export interface DashboardModalProps {
     onCloseVoicePreview: () => void;
     onVoiceParseConfirm: (data: CreateTaskDTO | UpdateTaskDTO) => void;
     isParsingVoice: boolean;
+}
+
+export interface UseDashboardReturn {
+    tasks: Task[];
+    isLoading: boolean;
+    error: string | null;
+    filters: ReturnType<typeof useFilterStore.getState>['filters'];
+    parsedVoiceData: ReturnType<typeof useVoiceStore.getState>['parsedData'];
+    isParsingVoice: boolean;
+    voiceError: string | null;
+    viewMode: 'kanban' | 'list';
+    showTaskForm: boolean;
+    showVoiceRecorder: boolean;
+    editingTask: Task | null;
+    deleteConfirmation: { isOpen: boolean; taskId: string | null };
+    handleCreateTask: ReturnType<typeof useDashboardTasks>['handleCreateTask'];
+    handleUpdateTask: ReturnType<typeof useDashboardTasks>['handleUpdateTask'];
+    handleDeleteTask: ReturnType<typeof useDashboardTasks>['handleDeleteTask'];
+    confirmDelete: ReturnType<typeof useDashboardTasks>['confirmDelete'];
+    handleEditTask: ReturnType<typeof useDashboardTasks>['handleEditTask'];
+    handleVoiceRecordingComplete: ReturnType<typeof useDashboardVoice>['handleVoiceRecordingComplete'];
+    handleVoiceParseConfirm: ReturnType<typeof useDashboardVoice>['handleVoiceParseConfirm'];
+    setViewMode: (mode: 'kanban' | 'list') => void;
+    handleFilterChange: ReturnType<typeof useDashboardFilters>['handleFilterChange'];
+    clearFilters: ReturnType<typeof useDashboardFilters>['clearFilters'];
+    setShowTaskForm: (show: boolean) => void;
+    setShowVoiceRecorder: (show: boolean) => void;
+    handleCloseTaskForm: () => void;
+    setDeleteConfirmation: (state: { isOpen: boolean; taskId: string | null }) => void;
+    onCloseDeleteConfirmation: () => void;
+    onCloseVoicePreview: () => void;
 }

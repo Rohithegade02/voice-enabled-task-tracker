@@ -1,0 +1,1 @@
+export { VoiceProcessingModal } from './VoiceProcessingModal';

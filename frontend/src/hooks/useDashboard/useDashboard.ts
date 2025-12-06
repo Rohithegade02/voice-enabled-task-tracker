@@ -5,53 +5,15 @@ import { useDashboardVoice } from './useDashboardVoice';
 import { useDashboardFilters } from './useDashboardFilter';
 import { useDashboardUI } from './useDashboardUI';
 import type { Task } from '@/types';
+import type { UseDashboardReturn } from '@/screens/Dashboard/types';
 
-export interface UseDashboardReturn {
-    tasks: Task[];
-    isLoading: boolean;
-    error: string | null;
-    filters: ReturnType<typeof useFilterStore.getState>['filters'];
-    parsedVoiceData: ReturnType<typeof useVoiceStore.getState>['parsedData'];
-    isParsingVoice: boolean;
-    voiceError: string | null;
-    viewMode: 'kanban' | 'list';
-    showTaskForm: boolean;
-    showVoiceRecorder: boolean;
-    editingTask: Task | null;
-    deleteConfirmation: { isOpen: boolean; taskId: string | null };
-    handleCreateTask: ReturnType<typeof useDashboardTasks>['handleCreateTask'];
-    handleUpdateTask: ReturnType<typeof useDashboardTasks>['handleUpdateTask'];
-    handleDeleteTask: ReturnType<typeof useDashboardTasks>['handleDeleteTask'];
-    confirmDelete: ReturnType<typeof useDashboardTasks>['confirmDelete'];
-    handleEditTask: ReturnType<typeof useDashboardTasks>['handleEditTask'];
-    handleVoiceRecordingComplete: ReturnType<typeof useDashboardVoice>['handleVoiceRecordingComplete'];
-    handleVoiceParseConfirm: ReturnType<typeof useDashboardVoice>['handleVoiceParseConfirm'];
-    setViewMode: (mode: 'kanban' | 'list') => void;
-    handleFilterChange: ReturnType<typeof useDashboardFilters>['handleFilterChange'];
-    clearFilters: ReturnType<typeof useDashboardFilters>['clearFilters'];
-    setShowTaskForm: (show: boolean) => void;
-    setShowVoiceRecorder: (show: boolean) => void;
-    handleCloseTaskForm: () => void;
-    setDeleteConfirmation: (state: { isOpen: boolean; taskId: string | null }) => void;
-    onCloseDeleteConfirmation: () => void;
-}
 
 /**
  * useDashboard Hook
  * 
  * Main orchestrator for Dashboard screen.
  * Composes smaller hooks to manage tasks, filters, voice, and UI.
- * 
- * @returns Dashboard state and handlers
- * 
- * @example
- * const {
- *   tasks,
- *   isLoading,
- *   viewMode,
- *   handleCreateTask,
- *   handleFilterChange
- * } = useDashboard();
+ *
  */
 export const useDashboard = (): UseDashboardReturn => {
     // Zustand stores
@@ -124,6 +86,6 @@ export const useDashboard = (): UseDashboardReturn => {
         setShowVoiceRecorder,
         handleCloseTaskForm: uiActions.handleCloseTaskForm,
         setDeleteConfirmation,
-        onCloseDeleteConfirmation: uiActions.onCloseDeleteConfirmation,
+        onCloseDeleteConfirmation: voiceOperations.onCloseVoicePreview,
     };
 };

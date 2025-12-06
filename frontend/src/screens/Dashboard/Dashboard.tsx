@@ -36,6 +36,7 @@ export const Dashboard: React.FC = memo(() => {
         setShowVoiceRecorder,
         handleCloseTaskForm,
         onCloseDeleteConfirmation,
+        onCloseVoicePreview,
     } = useDashboard();
 
     return (
@@ -63,7 +64,7 @@ export const Dashboard: React.FC = memo(() => {
                 onCloseTaskForm={handleCloseTaskForm}
                 onOpenVoiceRecorder={() => setShowVoiceRecorder(true)}
                 onCloseVoiceRecorder={() => setShowVoiceRecorder(false)}
-                onCloseVoicePreview={() => { }}
+                onCloseVoicePreview={onCloseVoicePreview}
                 onEditTask={handleEditTask}
             />
 
