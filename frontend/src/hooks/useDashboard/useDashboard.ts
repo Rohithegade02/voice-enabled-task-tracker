@@ -69,7 +69,7 @@ export const useDashboard = (): UseDashboardReturn => {
     // DnD operations
     const dndOperations = useDashboardDnD({
         tasks: taskStore.tasks,
-        onUpdateTask: taskOperations.handleUpdateTask,
+        taskStore,
     });
 
     return {

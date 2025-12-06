@@ -8,7 +8,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreVertical, Calendar, Trash2, Edit } from 'lucide-react';
 import { format } from 'date-fns';
 import type { TaskCardProps } from './types';
-import { TaskPriority } from '@/types';
 import { cn } from '@/lib/utils';
 import { getColumnIndicatorColor, getPriorityStyle } from '@/utils';
 
@@ -37,8 +36,9 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
     });
 
     const style = {
-        transform: CSS.Translate.toString(transform),
+        transform: isDragging && transform ? CSS.Translate.toString(transform) : undefined,
         opacity: isDragging ? 0.5 : 1,
+        transition: isDragging ? 'none' : undefined,
     };
 
     const handleCardClick = (e: React.MouseEvent) => {
