@@ -37,6 +37,7 @@ export const useDashboardTasks = ({
                 toast.success('Task created successfully');
                 setShowTaskForm(false);
             } catch (err) {
+                toast.error('Task creation failed');
                 console.error('Create task error:', err);
             }
         },
@@ -52,6 +53,7 @@ export const useDashboardTasks = ({
                 setShowTaskForm(false);
                 setEditingTask(null);
             } catch (err) {
+                toast.error('Task update failed');
                 console.error('Update task error:', err);
             }
         },
@@ -74,6 +76,7 @@ export const useDashboardTasks = ({
             await deleteTask(deleteConfirmation.taskId);
             toast.success('Task deleted successfully');
         } catch (err) {
+            toast.error('Task deletion failed');
             console.error('Delete task error:', err);
         } finally {
             setDeleteConfirmation({ isOpen: false, taskId: null });

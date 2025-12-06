@@ -36,9 +36,8 @@ export const TaskCard: React.FC<TaskCardProps> = memo(({
     });
 
     const style = {
-        transform: isDragging && transform ? CSS.Translate.toString(transform) : undefined,
+        transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : 1,
-        transition: isDragging ? 'none' : undefined,
     };
 
     const handleCardClick = (e: React.MouseEvent) => {

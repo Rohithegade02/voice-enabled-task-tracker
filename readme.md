@@ -52,6 +52,3 @@ app.use(upload.single('audio')); // Multer handles file uploads
          └────────────────┘
 
 
-error boundary
-mobile ui
-search api

@@ -6,15 +6,14 @@ import {
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
-import { type Task, TaskStatus } from '@/types';
-import type { useTaskStore } from '@/stores/useTaskStore';
+import { type Task, TaskStatus, type UpdateTaskDTO } from '@/types';
 
 interface UseDashboardDnDProps {
     tasks: Task[];
-    taskStore: ReturnType<typeof useTaskStore.getState>;
+    onUpdateTask: (id: string, data: UpdateTaskDTO) => void;
 }
 
-export const useDashboardDnD = ({ tasks, taskStore }: UseDashboardDnDProps) => {
+export const useDashboardDnD = ({ tasks, onUpdateTask }: UseDashboardDnDProps) => {
     const [activeTask, setActiveTask] = useState<Task | null>(null);
 
     // Configure drag sensors
@@ -27,8 +26,8 @@ export const useDashboardDnD = ({ tasks, taskStore }: UseDashboardDnDProps) => {
     );
 
     const handleStatusChange = useCallback((id: string, status: TaskStatus) => {
-        taskStore.updateTask(id, { status });
-    }, [taskStore]);
+        onUpdateTask(id, { status });
+    }, [onUpdateTask]);
 
     const handleDragStart = useCallback((event: DragStartEvent) => {
         const { active } = event;
@@ -48,24 +47,11 @@ export const useDashboardDnD = ({ tasks, taskStore }: UseDashboardDnDProps) => {
         const newStatus = over.id as TaskStatus;
 
         if (newStatus && Object.values(TaskStatus).includes(newStatus)) {
-            const task = tasks.find(t => t.id === taskId);
-
-            if (task && task.status !== newStatus) {
-                // OPTIMISTIC UPDATE: Update UI immediately
-                const optimisticTask = { ...task, status: newStatus };
-                const optimisticTasks = tasks.map(t =>
-                    t.id === taskId ? optimisticTask : t
-                );
-
-                taskStore.tasks = optimisticTasks;
-
-                // Then make the API call
-                handleStatusChange(taskId, newStatus);
-            }
+            handleStatusChange(taskId, newStatus);
         }
 
         setActiveTask(null);
-    }, [tasks, taskStore, handleStatusChange]);
+    }, [handleStatusChange]);
 
     const handleDragCancel = useCallback(() => {
         setActiveTask(null);

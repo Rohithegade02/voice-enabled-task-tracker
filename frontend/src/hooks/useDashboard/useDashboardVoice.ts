@@ -63,6 +63,7 @@ export const useDashboardVoice = ({
                 resetParsing();
                 toast.success('Task created from voice input');
             } catch (err) {
+                toast.error('Task creation failed');
                 console.error('Voice task creation error:', err);
             }
         },

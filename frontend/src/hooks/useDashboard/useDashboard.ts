@@ -17,12 +17,10 @@ import type { UseDashboardReturn } from '@/screens/Dashboard/types';
  *
  */
 export const useDashboard = (): UseDashboardReturn => {
-    // Zustand stores
     const taskStore = useTaskStore();
     const filterStore = useFilterStore();
     const voiceStore = useVoiceStore();
 
-    // Local UI state
     const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
@@ -35,7 +33,6 @@ export const useDashboard = (): UseDashboardReturn => {
         taskId: null,
     });
 
-    // UI actions
     const uiActions = useDashboardUI({
         showTaskForm,
         setShowTaskForm,
@@ -44,7 +41,6 @@ export const useDashboard = (): UseDashboardReturn => {
         setDeleteConfirmation,
     });
 
-    // Task operations
     const taskOperations = useDashboardTasks({
         taskStore,
         setShowTaskForm,
@@ -52,7 +48,6 @@ export const useDashboard = (): UseDashboardReturn => {
         deleteConfirmation,
         setDeleteConfirmation,
     });
-
     // Voice operations
     const voiceOperations = useDashboardVoice({
         voiceStore,
@@ -60,16 +55,13 @@ export const useDashboard = (): UseDashboardReturn => {
         setShowVoiceRecorder,
     });
 
-    // Filter operations
     const filterOperations = useDashboardFilters({
         filterStore,
         taskStore,
     });
-
-    // DnD operations
     const dndOperations = useDashboardDnD({
         tasks: taskStore.tasks,
-        taskStore,
+        onUpdateTask: taskOperations.handleUpdateTask,
     });
 
     return {

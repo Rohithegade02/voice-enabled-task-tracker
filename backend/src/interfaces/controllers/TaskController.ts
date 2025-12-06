@@ -24,7 +24,7 @@ export class TaskController {
     private updateTaskUseCase: UpdateTaskUseCase,
     private deleteTaskUseCase: DeleteTaskUseCase,
     private parseVoiceInputUseCase: ParseVoiceInputUseCase
-  ) {}
+  ) { }
 
   // Create task manually
   createTask = async (req: Request, res: Response): Promise<void> => {
@@ -141,33 +141,33 @@ export class TaskController {
 
   // for testing purposes
   // Add this method to TaskController class
-parseTextInput = async (req: Request, res: Response): Promise<void> => {
-  const { transcript } = req.body;
+  parseTextInput = async (req: Request, res: Response): Promise<void> => {
+    const { transcript } = req.body;
 
-  if (!transcript || typeof transcript !== 'string' || transcript.trim().length === 0) {
-    throw new AppError(400, 'Transcript is required');
-  }
+    if (!transcript || typeof transcript !== 'string' || transcript.trim().length === 0) {
+      throw new AppError(400, 'Transcript is required');
+    }
 
-  // Create a mock service that only does Gemini parsing
-  const gemini = new (await import('../../infrastructure/services/GeminiParserService')).GeminiParserService();
-  const parsedInput = await gemini.parseTaskFromTranscript(transcript);
+    // Create a mock service that only does Gemini parsing
+    const gemini = new (await import('../../infrastructure/services/GeminiParserService')).GeminiParserService();
+    const parsedInput = await gemini.parseTaskFromTranscript(transcript);
 
-  const response: ParseVoiceResponseDTO = {
-    transcript: parsedInput.transcript,
-    parsedTask: {
-      title: parsedInput.title,
-      description: parsedInput.description,
-      priority: parsedInput.priority,
-      dueDate: parsedInput.dueDate?.toISOString(),
-      status: parsedInput.status,
-    },
+    const response: ParseVoiceResponseDTO = {
+      transcript: parsedInput.transcript,
+      parsedTask: {
+        title: parsedInput.title,
+        description: parsedInput.description,
+        priority: parsedInput.priority,
+        dueDate: parsedInput.dueDate?.toISOString(),
+        status: parsedInput.status,
+      },
+    };
+
+    res.status(200).json({
+      success: true,
+      data: response,
+    });
   };
-
-  res.status(200).json({
-    success: true,
-    data: response,
-  });
-};
   // Helper method to map Task entity to response DTO
   private mapToResponseDTO(task: Task): TaskResponseDTO {
     return {
