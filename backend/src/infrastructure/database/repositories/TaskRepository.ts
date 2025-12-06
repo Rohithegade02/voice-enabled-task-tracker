@@ -39,6 +39,7 @@ export class TaskRepository implements ITaskRepository {
     }
 
     if (filters?.search) {
+      // perform text search using $or operator(includes both title and description)
       query.$or = [
         { title: { $regex: filters.search, $options: 'i' } },
         { description: { $regex: filters.search, $options: 'i' } },
