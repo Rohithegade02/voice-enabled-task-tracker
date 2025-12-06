@@ -41,8 +41,12 @@ graph TD
 ### c. Frontend Install & Run
 1. Navigate to: `cd frontend`
 2. Install: `yarn install`
-3. Start Dev Server: `yarn dev`
-4. Access at: `http://localhost:5173`
+3. Configure Environment: Create `.env.local` file
+   ```env
+   VITE_API_BASE_URL=http://localhost:4000
+   ```
+4. Start Dev Server: `yarn dev`
+5. Access at: `http://localhost:5173`
 
 ## 2. Tech Stack
 
