@@ -184,3 +184,20 @@ We implemented several strategies to ensure the app feels instant and responsive
 ### Assumptions
 - **Single User**: application assumes a single-user environment.
 - **Environment**: Users have valid API keys.
+
+## 8. AI Tools Usage
+
+### a. AI Tools Used
+- **Google Deepmind Antigravity**: Primary agentic coding assistant for scaffolding, implementing features, and debugging.
+- **Google Gemini**: Used within the application itself for NLP parsing.
+
+### b. How They Helped
+- **Debugging**: Solved critical bugs like the Drag-and-Drop animation glitch and Form payload issues.
+- **Complex Logic**: Implemented the "Next Thursday" date parsing logic by adding validation layers over raw AI outputs.
+
+### c. Notable Prompts/Approaches
+- *"Fix the drag and drop animation issue where items revert to start."* -> Led to the `dropAnimation={null}` fix.
+
+### d. Key Learnings
+- **AI needs validation**: Relying solely on LLM output for logic (dates) is risky; robust systems need code-based validation layers (as implemented in `GeminiParserService`).
+- **Hook Separation**: Splitting giant hooks (`useDashboard`) into smaller, domain-specific hooks makes the codebase significantly easier to maintain and debug.
