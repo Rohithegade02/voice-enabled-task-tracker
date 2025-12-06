@@ -151,8 +151,6 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = memo(
                 onOpenTaskForm={onOpenTaskForm}
                 filters={filters}
             />
-
-            {/* Modals */}
             <DashboardModal
                 showTaskForm={showTaskForm}
                 onCloseTaskForm={onCloseTaskForm}
