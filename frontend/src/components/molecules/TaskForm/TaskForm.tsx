@@ -28,7 +28,6 @@ export const TaskForm: React.FC<TaskFormProps> = memo(({
     initialData,
     mode,
 }) => {
-    console.log(mode)
     const [formData, setFormData] = useState({
         title: initialData?.title || '',
         description: initialData?.description || '',

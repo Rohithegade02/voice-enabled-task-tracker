@@ -10,39 +10,52 @@ interface TaskState {
     tasks: Task[];
     isLoading: boolean;
     error: string | null;
+    searchCache: Map<string, Task[]>;
     fetchTasks: (filters?: TaskFilters) => Promise<void>;
     createTask: (data: CreateTaskDTO) => Promise<Task>;
     updateTask: (id: string, data: UpdateTaskDTO) => Promise<Task>;
     deleteTask: (id: string) => Promise<void>;
     clearError: () => void;
     resetStore: () => void;
+    clearCache: () => void;
 }
 
-// initial values
 const initialState = {
     tasks: [],
     isLoading: false,
     error: null,
+    searchCache: new Map<string, Task[]>(),
 };
 
-/**
- * Task Store - Manages all task-related state and operations
- */
 export const useTaskStore = create<TaskState>()(
     devtools(
-        (set) => ({
+        (set, get) => ({
             ...initialState,
 
             fetchTasks: async (filters?: TaskFilters) => {
+                const cacheKey = filters?.search ? `search:${filters.search.toLowerCase().trim()}` : '';
+
+                if (cacheKey) {
+                    const cached = get().searchCache.get(cacheKey);
+                    if (cached) {
+                        console.log('Using cached data');
+                        set({ tasks: cached, isLoading: false, error: null }, false, 'fetchTasks/cached');
+                        return;
+                    }
+                }
+
                 set({ isLoading: true, error: null }, false, 'fetchTasks/start');
 
                 try {
                     const tasks = await taskApi.getTasks(filters);
-                    set(
-                        { tasks, isLoading: false, error: null },
-                        false,
-                        'fetchTasks/success'
-                    );
+
+                    if (cacheKey) {
+                        const newCache = new Map(get().searchCache);
+                        newCache.set(cacheKey, tasks);
+                        set({ tasks, isLoading: false, error: null, searchCache: newCache }, false, 'fetchTasks/success');
+                    } else {
+                        set({ tasks, isLoading: false, error: null }, false, 'fetchTasks/success');
+                    }
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tasks';
                     set(
@@ -63,6 +76,7 @@ export const useTaskStore = create<TaskState>()(
                             tasks: [...state.tasks, newTask],
                             isLoading: false,
                             error: null,
+                            searchCache: new Map(),
                         }),
                         false,
                         'createTask/success'
@@ -90,6 +104,7 @@ export const useTaskStore = create<TaskState>()(
                             ),
                             isLoading: false,
                             error: null,
+                            searchCache: new Map(),
                         }),
                         false,
                         'updateTask/success'
@@ -115,6 +130,7 @@ export const useTaskStore = create<TaskState>()(
                             tasks: state.tasks.filter((task) => task.id !== id),
                             isLoading: false,
                             error: null,
+                            searchCache: new Map(),
                         }),
                         false,
                         'deleteTask/success'
@@ -131,6 +147,9 @@ export const useTaskStore = create<TaskState>()(
             },
             clearError: () => {
                 set({ error: null }, false, 'clearError');
+            },
+            clearCache: () => {
+                set({ searchCache: new Map() }, false, 'clearCache');
             },
             resetStore: () => {
                 set(initialState, false, 'resetStore');

@@ -71,7 +71,6 @@ export const useDashboardVoice = ({
 
     // handle closing voice preview modal
     const handleCloseVoicePreview = useCallback(() => {
-        console.log('Closing voice preview');
         resetParsing();
     }, [resetParsing]);
 
