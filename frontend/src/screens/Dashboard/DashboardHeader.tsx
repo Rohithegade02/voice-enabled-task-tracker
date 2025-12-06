@@ -13,9 +13,9 @@ const DashboardHeader = memo(({
             data-testid="dashboard-header"
         >
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">Task Tracker</h1>
+                <h1 className="text-3xl font-bold tracking-tight">AI Task</h1>
                 <p className="text-muted-foreground mt-1">
-                    Manage your tasks efficiently with voice commands
+                    Keep track of your tasks with ease
                 </p>
             </div>
 
