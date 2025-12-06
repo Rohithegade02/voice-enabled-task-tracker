@@ -25,12 +25,36 @@ export class GeminiParserService {
 
       const parsed = JSON.parse(jsonMatch[0]);
 
+      // Post-process to validate and correct date parsing
+      let dueDate = this.parseDate(parsed.dueDate);
+
+      // Helper to set end of day to avoid timezone issues (UI showing previous day)
+      const toEndOfDay = (date: Date) => {
+        const d = new Date(date);
+        d.setHours(23, 59, 59, 999);
+        return d;
+      };
+
+      // Validate weekday dates - if AI got it wrong, fix it
+      const lower = transcript.toLowerCase();
+      const today = new Date();
+
+      // Check for "next/by/on [weekday]" patterns
+      if (/(?:next|by|on)\s+monday/.test(lower)) dueDate = toEndOfDay(nextMonday(today));
+      else if (/(?:next|by|on)\s+tuesday/.test(lower)) dueDate = toEndOfDay(nextTuesday(today));
+      else if (/(?:next|by|on)\s+wednesday/.test(lower)) dueDate = toEndOfDay(nextWednesday(today));
+      else if (/(?:next|by|on)\s+thursday/.test(lower)) dueDate = toEndOfDay(nextThursday(today));
+      else if (/(?:next|by|on)\s+friday/.test(lower)) dueDate = toEndOfDay(nextFriday(today));
+      else if (/(?:next|by|on)\s+saturday/.test(lower)) dueDate = toEndOfDay(nextSaturday(today));
+      else if (/(?:next|by|on)\s+sunday/.test(lower)) dueDate = toEndOfDay(nextSunday(today));
+      else if (lower.includes('tomorrow')) dueDate = toEndOfDay(addDays(today, 1));
+
       return {
         transcript,
         title: parsed.title || this.extractSimpleTitle(transcript),
         description: parsed.description || undefined,
         priority: this.mapPriority(parsed.priority),
-        dueDate: this.parseDate(parsed.dueDate),
+        dueDate,
         status: this.mapStatus(parsed.status),
       };
     } catch (error) {
@@ -44,6 +68,15 @@ export class GeminiParserService {
     const todayStr = today.toISOString().split('T')[0];
     const dayOfWeek = today.toLocaleDateString('en-US', { weekday: 'long' });
 
+    // Calculate next weekday examples for the prompt
+    const nextMon = nextMonday(today).toISOString().split('T')[0];
+    const nextTue = nextTuesday(today).toISOString().split('T')[0];
+    const nextWed = nextWednesday(today).toISOString().split('T')[0];
+    const nextThu = nextThursday(today).toISOString().split('T')[0];
+    const nextFri = nextFriday(today).toISOString().split('T')[0];
+    const nextSat = nextSaturday(today).toISOString().split('T')[0];
+    const nextSun = nextSunday(today).toISOString().split('T')[0];
+
     return `You are an AI assistant extracting task details.
 Today: ${todayStr} (${dayOfWeek})
 Input: "${transcript}"
@@ -53,13 +86,19 @@ PRIORITY RULES:
 - Low: "low priority", "whenever", "not urgent", "no rush"
 - Medium: Default
 
-DATE RULES:
+DATE RULES (IMPORTANT - Use these exact dates):
 - "tomorrow" → ${addDays(today, 1).toISOString().split('T')[0]}
-- "next [Day]" → Date of next specific weekday
-- "in 3 days" → Add 3 days
-- "by Friday" → Coming Friday
+- "next Monday" → ${nextMon}
+- "next Tuesday" → ${nextTue}
+- "next Wednesday" → ${nextWed}
+- "next Thursday" → ${nextThu}
+- "next Friday" → ${nextFri}
+- "next Saturday" → ${nextSat}
+- "next Sunday" → ${nextSun}
+- "in X days" → Add X days to today
+- "by [Day]" → Use the next occurrence of that weekday
 - Specific dates → YYYY-MM-DD
-- None → null
+- None mentioned → null
 
 TITLE RULES:
 - Remove: "create", "add", "remind me to", "todo"
