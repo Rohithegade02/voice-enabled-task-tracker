@@ -154,7 +154,7 @@ The frontend uses **Atomic Design** principles and **Clean Code** hooks patterns
 
 We implemented several strategies to ensure the app feels instant and responsive.
 
-### ⚡ 1. Optimistic Updates (Drag & Drop)
+###  1. Optimistic Updates (Drag & Drop)
 *Found in: `hooks/useDashboard/useDashboardDnD.ts`*
 **Problem**: Waiting for the API to confirm a status change (e.g., "Todo" -> "Done") makes the drag action feel laggy.
 **Solution**:
@@ -163,13 +163,13 @@ We implemented several strategies to ensure the app feels instant and responsive
 3.  **Rollback**: If the API fails (rare), we revert the change to keep data consistent.
 *Result: Zero-latency interactions for the user.*
 
-### 🕒 2. Search Debouncing
+###  2. Search Debouncing
 *Found in: `hooks/useDebounce.ts`*
 **Problem**: Searching "Fix Bug" triggers 7 separate API calls (F, Fi, Fix, ...).
 **Solution**: We wait for the user to stop typing for 300ms before triggering the search logic.
 *Result: Reduced server load and smoother typing experience.*
 
-### 💾 3. Caching
+###  3. Caching
 *Found in: `hooks/useCache.ts`*
 **Problem**: Repeatedly calculating derived data or fetching static resources wastes CPU cycles.
 **Solution**: We implemented a lightweight LRU (Least Recently Used) cache strategy for specific heavy operations.
