@@ -4,10 +4,9 @@ import { Badge } from '@/components/atoms/badge';
 import { Button } from '@/components/atoms/button';
 import { MoreVertical, Edit, Trash2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/atoms/dropdown-menu';
-import { PRIORITY_COLORS, STATUS_COLORS } from '@/constants';
 import { format } from 'date-fns';
 import type { TaskListItemProps, TaskListProps } from './types';
-import { getPriorityStyle } from '@/utils';
+import { getColumnIndicatorColor, getPriorityStyle } from '@/utils';
 import { cn } from '@/lib/utils';
 
 /**
@@ -41,7 +40,7 @@ export const TaskListItem: React.FC<TaskListItemProps> = memo(({
                 </Activity>
             </TableCell>
             <TableCell>
-                <Badge variant={STATUS_COLORS[task.status]}>
+                <Badge variant="outline" className={cn("text-xs text-white font-semibold px-2 py-0.5 border-0 rounded-full", getColumnIndicatorColor(task.status))}>
                     {task.status}
                 </Badge>
             </TableCell>

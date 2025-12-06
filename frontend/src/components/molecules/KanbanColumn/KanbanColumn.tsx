@@ -3,7 +3,6 @@ import { useDroppable } from '@dnd-kit/core';
 import { TaskCard } from '../TaskCard/TaskCard';
 import { cn } from '@/lib/utils';
 import type { KanbanColumnProps } from './types';
-import { TaskStatus } from '@/types';
 import { getColumnIndicatorColor } from '@/utils';
 
 /**
@@ -40,7 +39,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = memo(({
             <div className="p-3 bg-(--kanban-in-light) border-b">
                 <div className="flex items-center gap-2">
                     <div className={cn(
-                        "w-2.5 h-2.5 rounded-full flex-shrink-0",
+                        "w-2.5 h-2.5 rounded-full shrink-0",
                         getColumnIndicatorColor(status)
                     )} />
                     <h3 className="font-semibold text-xs uppercase tracking-wide text-foreground/80">
