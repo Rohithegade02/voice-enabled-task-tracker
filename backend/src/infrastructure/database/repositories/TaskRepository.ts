@@ -39,7 +39,10 @@ export class TaskRepository implements ITaskRepository {
     }
 
     if (filters?.search) {
-      query.$text = { $search: filters.search };
+      query.$or = [
+        { title: { $regex: filters.search, $options: 'i' } },
+        { description: { $regex: filters.search, $options: 'i' } },
+      ];
     }
 
     const taskDocs = await TaskModel.find(query).sort({ createdAt: -1 });
