@@ -33,6 +33,7 @@ export interface UseDashboardReturn {
     setShowVoiceRecorder: (show: boolean) => void;
     handleCloseTaskForm: () => void;
     setDeleteConfirmation: (state: { isOpen: boolean; taskId: string | null }) => void;
+    onCloseDeleteConfirmation: () => void;
 }
 
 /**
@@ -76,6 +77,8 @@ export const useDashboard = (): UseDashboardReturn => {
         showTaskForm,
         setShowTaskForm,
         setEditingTask,
+        deleteConfirmation,
+        setDeleteConfirmation,
     });
 
     // Task operations
@@ -121,5 +124,6 @@ export const useDashboard = (): UseDashboardReturn => {
         setShowVoiceRecorder,
         handleCloseTaskForm: uiActions.handleCloseTaskForm,
         setDeleteConfirmation,
+        onCloseDeleteConfirmation: uiActions.onCloseDeleteConfirmation,
     };
 };

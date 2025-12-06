@@ -35,6 +35,7 @@ export const Dashboard: React.FC = memo(() => {
         setShowTaskForm,
         setShowVoiceRecorder,
         handleCloseTaskForm,
+        onCloseDeleteConfirmation,
     } = useDashboard();
 
     return (
@@ -68,7 +69,7 @@ export const Dashboard: React.FC = memo(() => {
 
             <ConfirmDialog
                 isOpen={deleteConfirmation.isOpen}
-                onClose={() => { }}
+                onClose={onCloseDeleteConfirmation}
                 onConfirm={confirmDelete}
                 title="Delete Task"
                 description="Are you sure you want to delete this task? This action cannot be undone."

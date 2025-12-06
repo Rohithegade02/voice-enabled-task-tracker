@@ -5,6 +5,8 @@ interface UseDashboardUIProps {
     showTaskForm: boolean;
     setShowTaskForm: (show: boolean) => void;
     setEditingTask: (task: Task | null) => void;
+    deleteConfirmation: { isOpen: boolean; taskId: string | null };
+    setDeleteConfirmation: (state: { isOpen: boolean; taskId: string | null }) => void;
 }
 
 /**
@@ -17,9 +19,9 @@ interface UseDashboardUIProps {
  * @returns UI operation handlers
  */
 export const useDashboardUI = ({
-    // showTaskForm,
     setShowTaskForm,
     setEditingTask,
+    setDeleteConfirmation,
 }: UseDashboardUIProps) => {
     /**
      * Handle task form close
@@ -29,7 +31,15 @@ export const useDashboardUI = ({
         setEditingTask(null);
     }, [setShowTaskForm, setEditingTask]);
 
+    /**
+     * Handle delete confirmation close
+     */
+    const onCloseDeleteConfirmation = useCallback(() => {
+        setDeleteConfirmation({ isOpen: false, taskId: null });
+    }, [setDeleteConfirmation]);
+
     return {
         handleCloseTaskForm,
+        onCloseDeleteConfirmation,
     };
 };
