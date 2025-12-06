@@ -3,7 +3,6 @@
 A full-stack application for managing tasks with voice command capabilities.
 
 ## 1. Project Setup
-[No changes to this section - keeping it as is]
 
 ### a. Prerequisites
 - **Node.js**: v18+ recommended
@@ -31,36 +30,82 @@ A full-stack application for managing tasks with voice command capabilities.
 4. Access at: `http://localhost:5173`
 
 ## 2. Tech Stack
-[No changes to this section]
 
 ### Backend
 - **Runtime**: Node.js + Express
 - **Language**: TypeScript
 - **Database**: MongoDB (Mongoose)
-- **AI Services**: AssemblyAI, Google Gemini
+- **AI Services**: 
+  - **AssemblyAI**: High-accuracy Speech-to-Text
+  - **Google Gemini**: Natural Language Understanding (Date/Intent extraction)
 - **File Handling**: Multer
 
 ### Frontend
 - **Framework**: React 19 + Vite
-- **Styling**: TailwindCSS v4 + Radix UI / Shadcn
+- **Styling**: TailwindCSS v4 + Shadcn UI
 - **State Management**: Zustand
-- **Drag & Drop**: @dnd-kit
+- **Drag & Drop**: @dnd-kit (Kanban board)
 - **Utilities**: date-fns, axios, lucide-react
 
 ## 3. API Documentation
-[No changes to this section]
 
 ### Task Endpoints
-- **GET/POST/PUT/DELETE** `/api/tasks`
+- **GET** `/api/tasks`
+  - Fetch all tasks. Supports optional query filters.
+- **POST** `/api/tasks`
+  - Create a new task.
+  - Body: `{ "title": "...", "priority": "High" }`
+- **PUT** `/api/tasks/:id`
+  - Update task details.
+  - Body: `{ "status": "Done" }` or any partial update.
+- **DELETE** `/api/tasks/:id`
+  - Remove a task permanently.
 
 ### AI Endpoints
 - **POST** `/api/tasks/parse-voice`
+  - Upload an audio file/blob for AI processing.
+  - **Body**: `FormData` with key `audio`.
+  - **Response**: `{ transcript: "...", parsedTask: { ... } }`
 - **POST** `/api/tasks/parse-text`
+  - Parse raw text string into structured task data.
+  - **Body**: `{ "text": "Fix bug by Friday" }`
 
 ## 4. Backend Code Architecture
-[No changes to this section]
 
-(Clean Architecture details...)
+The backend follows **Clean Architecture** principles to separate concerns and ensure scalability.
+*📖 Reference: [Clean Architecture in Node.js](https://medium.com/@ben.dev.io/clean-architecture-in-node-js-39c3358d46f3)*
+
+### 📂 Directory Structure (`src/`)
+
+#### 1. **Domain Layer** (`/domain`)
+*The core business logic. Completely isolated from external libraries (DB, web frameworks).*
+- **`/entities`**:
+  - `Task.ts`: Defines the Task model with pure business rules (e.g., validation, status changes).
+- **`/interfaces`**:
+  - `ITaskRepository.ts`: Contract defining how data *should* be saved/retrieved. (Infrastructure implements this).
+- **`/usecases`**:
+  - `CreateTask.ts`, `UpdateTask.ts`, etc.: Application-specific business rules. Orchestrates data flow between Entities and Repositories.
+
+#### 2. **Infrastructure Layer** (`/infrastructure`)
+*Implementations of external tools and database logic.*
+- **`/database`**:
+  - `TaskRepository.ts`: Implements `ITaskRepository`. Uses Mongoose to talk to MongoDB.
+- **`/services`**:
+  - `GeminiParserService.ts`: Implements AI parsing logic.
+  - `VoiceParsingService.ts`: Handles audio file processing via AssemblyAI.
+
+#### 3. **Interface Adapters** (`/interfaces`)
+*Connects the outside world (Web/HTTP) to the Application.*
+- **`/controllers`**:
+  - `TaskController.ts`: Handles HTTP requests/responses. Calls UseCases.
+- **`/routes`**:
+  - `taskRoutes.ts`: Defines API endpoints and maps them to Controller methods.
+- **`/middleware`**:
+  - `upload.ts`: Multer configuration for file uploads.
+  - `errorHandler.ts`: Centralized error handling.
+
+#### 4. **Configuration** (`/config`)
+- `env.ts`: Centralized environment variable management.
 
 ## 5. Frontend Code Architecture
 
