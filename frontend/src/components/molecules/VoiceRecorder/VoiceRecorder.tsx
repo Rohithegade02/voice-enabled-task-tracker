@@ -10,9 +10,9 @@ import {
 } from "@/components/atoms";
 import { Mic, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useVoiceRecorder } from "@/hooks";
 import type { VoiceRecorderProps } from "./types";
 import { formatTime } from "@/utils";
+import { useVoiceRecorder } from "@/hooks";
 
 export const VoiceRecorder: React.FC<VoiceRecorderProps> = memo(({
     isOpen,

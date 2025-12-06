@@ -95,7 +95,7 @@ export const useVoiceRecorder = (
             };
 
             recorder.onerror = (event: Event) => {
-                console.error('[MediaRecorder] Error:', event);
+                console.error('Error:', event);
                 setError('Recording failed. Please try again.');
                 reset();
             };
@@ -108,7 +108,7 @@ export const useVoiceRecorder = (
                 setRecordTime((t) => t + 1);
             }, 1000);
         } catch (err) {
-            console.error('[useVoiceRecorder] Start error:', err);
+            console.error(' Start error:', err);
 
             if (err instanceof Error) {
                 if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
