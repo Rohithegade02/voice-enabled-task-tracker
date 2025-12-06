@@ -49,7 +49,7 @@ export const useDashboardVoice = ({
             try {
                 await parseVoice(audioBlob);
             } catch (err) {
-                console.error('Voice parsing error:', err);
+                console.log('Voice parsing error:', err);
             }
         },
         [parseVoice, setShowVoiceRecorder]
@@ -64,7 +64,7 @@ export const useDashboardVoice = ({
                 toast.success('Task created from voice input');
             } catch (err) {
                 toast.error('Task creation failed');
-                console.error('Voice task creation error:', err);
+                console.log('Voice task creation error:', err);
             }
         },
         [createTask, resetParsing]

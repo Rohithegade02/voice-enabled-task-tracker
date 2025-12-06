@@ -43,7 +43,6 @@ client.interceptors.request.use(
         return config;
     },
     (error: AxiosError) => {
-        console.error('[API Request Error]', error);
         return Promise.reject(new NetworkError('Failed to send request'));
     }
 );
@@ -55,15 +54,6 @@ client.interceptors.response.use(
         return response;
     },
     (error: AxiosError<ApiResponse<unknown>>) => {
-        // Log error in development
-        if (import.meta.env.DEV) {
-            console.error('[API Error]', {
-                url: error.config?.url,
-                method: error.config?.method,
-                status: error.response?.status,
-                message: error.response?.data?.error?.message || error.message,
-            });
-        }
 
         // Handle network errors
         if (!error.response) {

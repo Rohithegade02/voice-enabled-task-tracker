@@ -38,7 +38,7 @@ export const useDashboardTasks = ({
                 setShowTaskForm(false);
             } catch (err) {
                 toast.error('Task creation failed');
-                console.error('Create task error:', err);
+                console.log('Create task error:', err);
             }
         },
         [createTask, setShowTaskForm]
@@ -54,7 +54,7 @@ export const useDashboardTasks = ({
                 setEditingTask(null);
             } catch (err) {
                 toast.error('Task update failed');
-                console.error('Update task error:', err);
+                console.log('Update task error:', err);
             }
         },
         [updateTask, setShowTaskForm, setEditingTask]
@@ -77,7 +77,7 @@ export const useDashboardTasks = ({
             toast.success('Task deleted successfully');
         } catch (err) {
             toast.error('Task deletion failed');
-            console.error('Delete task error:', err);
+            console.log('Delete task error:', err);
         } finally {
             setDeleteConfirmation({ isOpen: false, taskId: null });
         }
