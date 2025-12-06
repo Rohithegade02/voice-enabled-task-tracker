@@ -73,7 +73,7 @@ A full-stack application for managing tasks with voice command capabilities.
 ## 4. Backend Code Architecture
 
 The backend follows **Clean Architecture** principles to separate concerns and ensure scalability.
-*📖 Reference: [Clean Architecture in Node.js](https://medium.com/@ben.dev.io/clean-architecture-in-node-js-39c3358d46f3)*
+* - Reference: [Clean Architecture in Node.js](https://medium.com/@ben.dev.io/clean-architecture-in-node-js-39c3358d46f3)*
 
 ### 📂 Directory Structure (`src/`)
 
@@ -110,7 +110,7 @@ The backend follows **Clean Architecture** principles to separate concerns and e
 ## 5. Frontend Code Architecture
 
 The frontend uses **Atomic Design** principles and **Clean Code** hooks patterns.
-*📖 Reference: [React Patterns](https://www.patterns.dev/react/)*
+* - Reference: [React Patterns](https://www.patterns.dev/react/)*
 
 ### 📂 File Guide
 
