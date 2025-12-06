@@ -50,3 +50,6 @@ app.use(upload.single('audio')); // Multer handles file uploads
          │  transcribe    │
          │  (audioBuffer) │
          └────────────────┘
+
+
+error boundary

@@ -37,6 +37,12 @@ export const Dashboard: React.FC = memo(() => {
         handleCloseTaskForm,
         onCloseDeleteConfirmation,
         onCloseVoicePreview,
+        activeTask,
+        sensors,
+        handleDragStart,
+        handleDragEnd,
+        handleDragCancel,
+        handleStatusChange,
     } = useDashboard();
 
     return (
@@ -66,6 +72,12 @@ export const Dashboard: React.FC = memo(() => {
                 onCloseVoiceRecorder={() => setShowVoiceRecorder(false)}
                 onCloseVoicePreview={onCloseVoicePreview}
                 onEditTask={handleEditTask}
+                activeTask={activeTask}
+                sensors={sensors}
+                handleDragStart={handleDragStart}
+                handleDragEnd={handleDragEnd}
+                handleDragCancel={handleDragCancel}
+                handleStatusChange={handleStatusChange}
             />
 
             <ConfirmDialog

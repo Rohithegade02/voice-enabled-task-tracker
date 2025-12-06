@@ -32,6 +32,13 @@ export interface DashboardPresentationProps {
     onCloseVoiceRecorder: () => void;
     onCloseVoicePreview: () => void;
     onEditTask: (task: Task) => void;
+    // DnD
+    sensors: any;
+    handleDragStart: (event: DragStartEvent) => void;
+    handleDragEnd: (event: DragEndEvent) => void;
+    handleDragCancel: () => void;
+    activeTask: Task | null;
+    handleStatusChange: (id: string, status: TaskStatus) => void;
 }
 
 export interface DashboardKanbanViewProps {
@@ -125,4 +132,11 @@ export interface UseDashboardReturn {
     setDeleteConfirmation: (state: { isOpen: boolean; taskId: string | null }) => void;
     onCloseDeleteConfirmation: () => void;
     onCloseVoicePreview: () => void;
+    // DnD
+    sensors: any;
+    handleDragStart: (event: DragStartEvent) => void;
+    handleDragEnd: (event: DragEndEvent) => void;
+    handleDragCancel: () => void;
+    activeTask: Task | null;
+    handleStatusChange: (id: string, status: TaskStatus) => void;
 }

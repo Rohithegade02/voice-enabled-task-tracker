@@ -4,6 +4,7 @@ import { useDashboardTasks } from './useDashboardTask';
 import { useDashboardVoice } from './useDashboardVoice';
 import { useDashboardFilters } from './useDashboardFilter';
 import { useDashboardUI } from './useDashboardUI';
+import { useDashboardDnD } from './useDashboardDnD';
 import type { Task } from '@/types';
 import type { UseDashboardReturn } from '@/screens/Dashboard/types';
 
@@ -65,6 +66,12 @@ export const useDashboard = (): UseDashboardReturn => {
         taskStore,
     });
 
+    // DnD operations
+    const dndOperations = useDashboardDnD({
+        tasks: taskStore.tasks,
+        onUpdateTask: taskOperations.handleUpdateTask,
+    });
+
     return {
         tasks: taskStore.tasks,
         isLoading: taskStore.isLoading,
@@ -86,6 +93,8 @@ export const useDashboard = (): UseDashboardReturn => {
         setShowVoiceRecorder,
         handleCloseTaskForm: uiActions.handleCloseTaskForm,
         setDeleteConfirmation,
-        onCloseDeleteConfirmation: voiceOperations.onCloseVoicePreview,
+        onCloseDeleteConfirmation: uiActions.onCloseDeleteConfirmation,
+        onCloseVoicePreview: voiceOperations.onCloseVoicePreview,
+        ...dndOperations,
     };
 };

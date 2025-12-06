@@ -1,17 +1,11 @@
 import React, { memo, useMemo } from 'react';
-import {
-    type DragEndEvent,
-    type DragStartEvent,
-    PointerSensor,
-    useSensor,
-    useSensors,
-} from '@dnd-kit/core';
 import { type Task, type CreateTaskDTO, type UpdateTaskDTO, TaskStatus } from '@/types';
 import type { DashboardPresentationProps } from './types';
 import DashboardHeader from './DashboardHeader';
 import DashboardFilterBar from './DashboardFilterBar';
 import DashboardContent from './DashboardContent';
 import DashboardModal from './DashboardModal';
+
 
 export const DashboardPresentation: React.FC<DashboardPresentationProps> = memo(({
     tasks,
@@ -38,17 +32,14 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = memo(
     onCloseVoiceRecorder,
     onCloseVoicePreview,
     onEditTask,
+    // DnD props
+    activeTask,
+    sensors,
+    handleDragStart,
+    handleDragEnd,
+    handleDragCancel,
+    handleStatusChange,
 }) => {
-    const [activeTask, setActiveTask] = React.useState<Task | null>(null);
-
-    // Configure drag sensors
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 8,
-            },
-        })
-    );
 
     // Group tasks for Kanban view
     const todoTasks = useMemo(() => tasks?.filter(t => t.status === TaskStatus.TODO), [tasks]);
@@ -61,39 +52,6 @@ export const DashboardPresentation: React.FC<DashboardPresentationProps> = memo(
         } else {
             onCreateTask(data as CreateTaskDTO);
         }
-    };
-
-    const handleStatusChange = (id: string, status: TaskStatus) => {
-        onUpdateTask(id, { status });
-    };
-
-    const handleDragStart = (event: DragStartEvent) => {
-        const { active } = event;
-        const task = tasks?.find(t => t.id === active.id);
-        setActiveTask(task || null);
-    };
-
-    const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event;
-
-        if (!over) {
-            setActiveTask(null);
-            return;
-        }
-
-        const taskId = active.id as string;
-        const newStatus = over.id as TaskStatus;
-
-        // Update task status if dropped on a different column
-        if (newStatus && Object.values(TaskStatus).includes(newStatus)) {
-            handleStatusChange(taskId, newStatus);
-        }
-
-        setActiveTask(null);
-    };
-
-    const handleDragCancel = () => {
-        setActiveTask(null);
     };
 
     const columns = useMemo(() => [
