@@ -7,12 +7,9 @@ import type { Task, CreateTaskDTO, UpdateTaskDTO, TaskFilters } from '@/types';
  * Task Store State Interface
  */
 interface TaskState {
-    // State
     tasks: Task[];
     isLoading: boolean;
     error: string | null;
-
-    // Actions
     fetchTasks: (filters?: TaskFilters) => Promise<void>;
     createTask: (data: CreateTaskDTO) => Promise<Task>;
     updateTask: (id: string, data: UpdateTaskDTO) => Promise<Task>;
@@ -21,9 +18,7 @@ interface TaskState {
     resetStore: () => void;
 }
 
-/**
- * Initial state for the task store
- */
+// initial values
 const initialState = {
     tasks: [],
     isLoading: false,
@@ -32,24 +27,12 @@ const initialState = {
 
 /**
  * Task Store - Manages all task-related state and operations
- * 
- * @example
- * const { tasks, fetchTasks, createTask } = useTaskStore();
- * 
- * // Fetch tasks with filters
- * await fetchTasks({ status: TaskStatus.TODO });
- * 
- * // Create a new task
- * await createTask({ title: 'New Task', priority: TaskPriority.HIGH });
  */
 export const useTaskStore = create<TaskState>()(
     devtools(
         (set) => ({
             ...initialState,
 
-            /**
-             * Fetch tasks from the API with optional filters
-             */
             fetchTasks: async (filters?: TaskFilters) => {
                 set({ isLoading: true, error: null }, false, 'fetchTasks/start');
 
@@ -70,10 +53,6 @@ export const useTaskStore = create<TaskState>()(
                     throw error;
                 }
             },
-
-            /**
-             * Create a new task
-             */
             createTask: async (data: CreateTaskDTO) => {
                 set({ isLoading: true, error: null }, false, 'createTask/start');
 
@@ -99,10 +78,6 @@ export const useTaskStore = create<TaskState>()(
                     throw error;
                 }
             },
-
-            /**
-             * Update an existing task
-             */
             updateTask: async (id: string, data: UpdateTaskDTO) => {
                 set({ isLoading: true, error: null }, false, 'updateTask/start');
 
@@ -130,10 +105,6 @@ export const useTaskStore = create<TaskState>()(
                     throw error;
                 }
             },
-
-            /**
-             * Delete a task
-             */
             deleteTask: async (id: string) => {
                 set({ isLoading: true, error: null }, false, 'deleteTask/start');
 
@@ -158,17 +129,9 @@ export const useTaskStore = create<TaskState>()(
                     throw error;
                 }
             },
-
-            /**
-             * Clear error state
-             */
             clearError: () => {
                 set({ error: null }, false, 'clearError');
             },
-
-            /**
-             * Reset store to initial state
-             */
             resetStore: () => {
                 set(initialState, false, 'resetStore');
             },
@@ -177,9 +140,7 @@ export const useTaskStore = create<TaskState>()(
     )
 );
 
-/**
- * Selectors for optimized component re-renders
- */
+// selectors
 export const useTasksSelector = () => useTaskStore((state) => state.tasks);
 export const useTaskLoadingSelector = () => useTaskStore((state) => state.isLoading);
 export const useTaskErrorSelector = () => useTaskStore((state) => state.error);

@@ -3,24 +3,17 @@ import { devtools } from 'zustand/middleware';
 import { taskApi } from '@/services/api';
 import type { ParsedVoiceInput } from '@/types';
 
-/**
- * Voice Store State Interface
- */
+
 interface VoiceState {
-    // State
     parsedData: ParsedVoiceInput | null;
     isLoading: boolean;
     error: string | null;
-
-    // Actions
     parseVoice: (audioBlob: Blob) => Promise<void>;
     resetParsing: () => void;
     clearError: () => void;
 }
 
-/**
- * Initial state for the voice store
- */
+//Initial state 
 const initialState = {
     parsedData: null,
     isLoading: false,
@@ -30,23 +23,11 @@ const initialState = {
 /**
  * Voice Store - Manages voice parsing state and operations
  * 
- * @example
- * const { parsedData, parseVoice, resetParsing } = useVoiceStore();
- * 
- * // Parse voice input
- * await parseVoice(audioBlob);
- * 
- * // Reset after use
- * resetParsing();
  */
 export const useVoiceStore = create<VoiceState>()(
     devtools(
         (set) => ({
             ...initialState,
-
-            /**
-             * Parse voice input from audio blob
-             */
             parseVoice: async (audioBlob: Blob) => {
                 set({ isLoading: true, error: null }, false, 'parseVoice/start');
 
@@ -67,17 +48,9 @@ export const useVoiceStore = create<VoiceState>()(
                     throw error;
                 }
             },
-
-            /**
-             * Reset parsing state
-             */
             resetParsing: () => {
                 set(initialState, false, 'resetParsing');
             },
-
-            /**
-             * Clear error state
-             */
             clearError: () => {
                 set({ error: null }, false, 'clearError');
             },
@@ -86,9 +59,7 @@ export const useVoiceStore = create<VoiceState>()(
     )
 );
 
-/**
- * Selectors for optimized component re-renders
- */
+// selectors
 export const useParsedDataSelector = () => useVoiceStore((state) => state.parsedData);
 export const useVoiceLoadingSelector = () => useVoiceStore((state) => state.isLoading);
 export const useVoiceErrorSelector = () => useVoiceStore((state) => state.error);
