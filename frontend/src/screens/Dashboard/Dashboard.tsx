@@ -89,6 +89,7 @@ export const Dashboard: React.FC = memo(() => {
                 confirmText="Delete"
                 cancelText="Cancel"
                 isDestructive
+
             />
         </React.Fragment>
     );

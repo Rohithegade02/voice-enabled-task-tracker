@@ -38,7 +38,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = memo(({
 
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
-            <AlertDialogContent>
+            <AlertDialogContent className='bg-white'>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>{description}</AlertDialogDescription>
@@ -49,7 +49,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = memo(({
                     </AlertDialogCancel>
                     <AlertDialogAction
                         onClick={handleConfirm}
-                        className={isDestructive ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : ''}
+                        className={isDestructive ? 'bg-destructive text-white hover:bg-destructive/90' : ''}
                     >
                         {confirmText}
                     </AlertDialogAction>

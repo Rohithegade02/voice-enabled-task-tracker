@@ -19,7 +19,7 @@ const DashboardHeader = memo(({
                 </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center md:gap-4  justify-between">
                 <Button
                     variant="outline"
                     onClick={onOpenVoiceRecorder}

@@ -55,17 +55,17 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                             placeholder="Search tasks..."
                             value={filters.search || ''}
                             onChange={(e) => handleSearchChange(e.target.value)}
-                            className="pl-9"
+                            className="pl-9 md:w-[30vw] lg:w-[40vw]"
                         />
                     </div>
                 </div>
-                <div className="w-full sm:w-[180px] space-y-2">
+                <div className="w-full  space-y-2">
                     <Label htmlFor="status-filter" className="sr-only">Status</Label>
                     <Select
                         value={filters.status || 'all'}
                         onValueChange={handleStatusChange}
                     >
-                        <SelectTrigger id="status-filter">
+                        <SelectTrigger className='w-full' id="status-filter">
                             <SelectValue placeholder="All Statuses" />
                         </SelectTrigger>
                         <SelectContent>
@@ -76,13 +76,13 @@ export const FilterBar: React.FC<FilterBarProps> = memo(({
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="w-full sm:w-[180px] space-y-2">
+                <div className="w-full  space-y-2">
                     <Label htmlFor="priority-filter" className="sr-only">Priority</Label>
                     <Select
                         value={filters.priority || 'all'}
                         onValueChange={handlePriorityChange}
                     >
-                        <SelectTrigger id="priority-filter">
+                        <SelectTrigger className='w-full' id="priority-filter">
                             <SelectValue placeholder="All Priorities" />
                         </SelectTrigger>
                         <SelectContent>
